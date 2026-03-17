@@ -38,11 +38,36 @@ The dashboard presents:
 - precision-recall evidence for the XGBoost submission model
 - feature importance and downloadable output artifacts
 
+## Streamlit Community Cloud deployment
+
+This repository is set up so the deployed app only installs the packages needed for the dashboard itself.
+
+- `requirements.txt`: minimal dependencies for Streamlit Community Cloud
+- `requirements-full.txt`: full local environment for rerunning the modeling scripts
+
+For deployment:
+
+1. Go to `https://share.streamlit.io/`
+2. Click `Create app`
+3. Select this repository: `skannepa2206/insurance-fraud-detection-ml-dashboard`
+4. Set branch to `main`
+5. Set main file path to `streamlit_app.py`
+6. Optionally choose a custom subdomain
+7. In `Advanced settings`, keep the default unless you need a specific Python version
+8. Click `Deploy`
+
+Suggested custom subdomains:
+
+- `insurance-fraud-dashboard`
+- `auto-fraud-ml-dashboard`
+- `veena-insurance-fraud-dashboard`
+
 ## Recreate the analysis artifacts
 
 If the datasets are available locally, the analysis and figure scripts can be run with:
 
 ```powershell
+pip install -r requirements-full.txt
 python scripts/fraud_detection_assignment.py --model xgboost
 python scripts/generate_submission_visuals.py
 ```
