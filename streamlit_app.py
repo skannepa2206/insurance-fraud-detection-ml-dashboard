@@ -211,7 +211,7 @@ def apply_css(theme_name: str) -> None:
         }}
 
         [data-testid="stToolbar"] {{
-          display: none;
+          background: transparent !important;
         }}
 
         [data-testid="collapsedControl"] {{
@@ -238,9 +238,6 @@ def apply_css(theme_name: str) -> None:
           box-shadow: var(--shadow) !important;
           visibility: visible !important;
           opacity: 1 !important;
-          color: transparent !important;
-          font-size: 0 !important;
-          line-height: 0 !important;
           position: relative !important;
           z-index: 1000 !important;
         }}
@@ -249,33 +246,14 @@ def apply_css(theme_name: str) -> None:
           margin-left: auto !important;
         }}
 
-        [data-testid="collapsedControl"] button svg,
-        [data-testid="stSidebarCollapseButton"] svg,
-        button[aria-label="Open sidebar"] svg,
-        button[aria-label="Close sidebar"] svg {{
-          display: none !important;
-        }}
-
-        [data-testid="collapsedControl"] button::after,
-        button[aria-label="Open sidebar"]::after {{
-          content: ">>";
-          font-family: '{FONT_FAMILY}', sans-serif !important;
-          font-size: 0.82rem !important;
-          font-weight: 700 !important;
-          letter-spacing: -0.04em !important;
-          line-height: 1 !important;
+        [data-testid="collapsedControl"] button *,
+        [data-testid="stSidebarCollapseButton"] *,
+        button[aria-label="Open sidebar"] *,
+        button[aria-label="Close sidebar"] * {{
           color: var(--text) !important;
-        }}
-
-        [data-testid="stSidebarCollapseButton"]::after,
-        button[aria-label="Close sidebar"]::after {{
-          content: "<<";
-          font-family: '{FONT_FAMILY}', sans-serif !important;
-          font-size: 0.82rem !important;
-          font-weight: 700 !important;
-          letter-spacing: -0.04em !important;
-          line-height: 1 !important;
-          color: var(--text) !important;
+          fill: var(--text) !important;
+          stroke: var(--text) !important;
+          opacity: 1 !important;
         }}
 
         [data-testid="collapsedControl"] button:hover,
