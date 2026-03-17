@@ -313,13 +313,21 @@ def apply_css(theme_name: str) -> None:
           justify-content: center;
         }}
 
+        .snapshot-head {{
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          margin-bottom: 8px;
+        }}
+
         .snapshot-label {{
           font-family: 'IBM Plex Mono', monospace;
           color: var(--label);
           font-size: 0.76rem;
           letter-spacing: 0.08em;
           text-transform: uppercase;
-          margin-bottom: 8px;
+          margin-bottom: 0;
         }}
 
         .snapshot-value {{
@@ -1107,16 +1115,31 @@ def main() -> None:
 
     snapshot_cols = st.columns(3)
     snapshots = [
-        ("Selected model", model_label),
-        ("Manual review rate", f"{format_pct(review_rate)} of claims flagged"),
-        ("Current threshold", f"Score cutoff {format_metric(test_metrics['threshold'])}"),
+        (
+            "Selected model",
+            model_label,
+            "Model currently used to populate the dashboard metrics and visuals.",
+        ),
+        (
+            "Manual review rate",
+            f"{format_pct(review_rate)} of claims flagged",
+            "Share of claims that would be routed to human review at the current threshold.",
+        ),
+        (
+            "Current threshold",
+            f"Score cutoff {format_metric(test_metrics['threshold'])}",
+            "Probability score used as the current decision cutoff for flagging a claim.",
+        ),
     ]
-    for col, (label, value) in zip(snapshot_cols, snapshots):
+    for col, (label, value, help_text) in zip(snapshot_cols, snapshots):
         with col:
             st.markdown(
                 f"""
                 <div class="snapshot-chip">
-                  <div class="snapshot-label">{label}</div>
+                  <div class="snapshot-head">
+                    <div class="snapshot-label">{label}</div>
+                    {info_badge(help_text)}
+                  </div>
                   <div class="snapshot-value">{value}</div>
                 </div>
                 """,
