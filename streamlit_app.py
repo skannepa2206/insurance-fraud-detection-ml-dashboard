@@ -759,20 +759,34 @@ def plot_model_comparison(df: pd.DataFrame, theme_name: str) -> go.Figure:
             text=[f"{v:.3f}" for v in chart["test_average_precision"]],
             textposition="outside",
             cliponaxis=False,
+            textfont=dict(color=palette["text"], size=15),
             hovertemplate="<b>%{x}</b><br>Average precision: %{y:.3f}<extra></extra>",
         )
     )
     max_value = float(chart["test_average_precision"].max())
     fig.update_layout(
         title="Model ranking quality",
+        title_font=dict(color=palette["text"], size=16),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor=palette["plot_bg"],
+        template="none",
         font=dict(color=palette["text"], family="Space Grotesk"),
         margin=dict(l=20, r=20, t=58, b=20),
         height=360,
         yaxis_title="Test average precision",
     )
-    fig.update_yaxes(gridcolor=palette["grid"], range=[0, max_value * 1.18])
+    fig.update_yaxes(
+        gridcolor=palette["grid"],
+        range=[0, max_value * 1.18],
+        title_font=dict(color=palette["label"], size=14),
+        tickfont=dict(color=palette["label"], size=12),
+        zerolinecolor=palette["grid"],
+    )
+    fig.update_xaxes(
+        title_font=dict(color=palette["label"], size=14),
+        tickfont=dict(color=palette["label"], size=12),
+        linecolor=palette["grid"],
+    )
     return fig
 
 
@@ -799,17 +813,37 @@ def plot_threshold_tradeoff(df: pd.DataFrame, theme_name: str, selected_threshol
     fig.add_vline(x=selected_threshold, line_dash="dot", line_color=palette["muted"])
     fig.update_layout(
         title="Threshold trade-off",
+        title_font=dict(color=palette["text"], size=16),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor=palette["plot_bg"],
+        template="none",
         font=dict(color=palette["text"], family="Space Grotesk"),
         margin=dict(l=20, r=20, t=58, b=24),
         height=360,
         xaxis_title="Probability threshold",
         yaxis_title="Score",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0),
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            x=0,
+            font=dict(color=palette["text"], size=13),
+            bgcolor="rgba(0,0,0,0)",
+        ),
     )
-    fig.update_yaxes(range=[0, 1], gridcolor=palette["grid"])
-    fig.update_xaxes(gridcolor=palette["grid"])
+    fig.update_yaxes(
+        range=[0, 1],
+        gridcolor=palette["grid"],
+        title_font=dict(color=palette["label"], size=14),
+        tickfont=dict(color=palette["label"], size=12),
+        zerolinecolor=palette["grid"],
+    )
+    fig.update_xaxes(
+        gridcolor=palette["grid"],
+        title_font=dict(color=palette["label"], size=14),
+        tickfont=dict(color=palette["label"], size=12),
+        linecolor=palette["grid"],
+    )
     return fig
 
 
@@ -826,15 +860,26 @@ def plot_feature_importance(df: pd.DataFrame, theme_name: str) -> go.Figure:
     )
     fig.update_layout(
         title="Top driver signals",
+        title_font=dict(color=palette["text"], size=16),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor=palette["plot_bg"],
+        template="none",
         font=dict(color=palette["text"], family="Space Grotesk"),
         margin=dict(l=20, r=20, t=58, b=20),
         height=430,
         coloraxis_showscale=False,
     )
-    fig.update_xaxes(gridcolor=palette["grid"])
-    fig.update_yaxes(gridcolor=palette["grid"])
+    fig.update_xaxes(
+        gridcolor=palette["grid"],
+        title_font=dict(color=palette["label"], size=14),
+        tickfont=dict(color=palette["label"], size=12),
+        zerolinecolor=palette["grid"],
+    )
+    fig.update_yaxes(
+        gridcolor=palette["grid"],
+        title_font=dict(color=palette["label"], size=14),
+        tickfont=dict(color=palette["label"], size=12),
+    )
     return fig
 
 
