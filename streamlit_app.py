@@ -21,13 +21,15 @@ THEMES = {
         "paper": "#f4efe6",
         "paper_2": "#fbf8f3",
         "sidebar": "#efe8dc",
-        "panel": "rgba(255,255,255,0.78)",
-        "panel_strong": "rgba(255,255,255,0.96)",
-        "panel_soft": "#f8f3eb",
+        "panel": "rgba(255,255,255,0.86)",
+        "panel_strong": "#fffdfa",
+        "panel_soft": "#fff9f1",
         "text": "#151515",
-        "muted": "#6d675f",
-        "stroke": "rgba(24,24,24,0.12)",
-        "stroke_strong": "rgba(24,24,24,0.22)",
+        "label": "#5a534a",
+        "muted": "#645c53",
+        "subtle": "#7a736a",
+        "stroke": "rgba(24,24,24,0.14)",
+        "stroke_strong": "rgba(24,24,24,0.28)",
         "accent": "#ff5a52",
         "accent_soft": "#fff1ef",
         "accent_text": "#151515",
@@ -43,13 +45,15 @@ THEMES = {
         "paper": "#0b0b0c",
         "paper_2": "#111113",
         "sidebar": "#121214",
-        "panel": "rgba(19,19,21,0.88)",
-        "panel_strong": "rgba(22,22,24,0.98)",
-        "panel_soft": "#161619",
-        "text": "#f2eee6",
-        "muted": "#b0a89f",
-        "stroke": "rgba(255,255,255,0.12)",
-        "stroke_strong": "rgba(255,255,255,0.22)",
+        "panel": "rgba(19,19,21,0.94)",
+        "panel_strong": "#17181b",
+        "panel_soft": "#1b1c1f",
+        "text": "#f4efe7",
+        "label": "#ddd6cc",
+        "muted": "#cbc4ba",
+        "subtle": "#a79f95",
+        "stroke": "rgba(255,255,255,0.14)",
+        "stroke_strong": "rgba(255,255,255,0.26)",
         "accent": "#ff5a52",
         "accent_soft": "#2a1414",
         "accent_text": "#f7f3eb",
@@ -66,7 +70,7 @@ THEMES = {
 
 st.set_page_config(
     page_title="Insurance Fraud Risk Dashboard",
-    page_icon="AF",
+    page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -94,6 +98,38 @@ def info_badge(copy: str) -> str:
     return f'<span class="info-dot" title="{html.escape(copy)}">i</span>'
 
 
+def metric_card(label: str, value: str, tooltip: str, compact: bool = False) -> str:
+    compact_class = " metric-card-compact" if compact else ""
+    return f"""
+    <div class="metric-card{compact_class}">
+      <div class="metric-head">
+        <div class="metric-name">{label}</div>
+        {info_badge(tooltip)}
+      </div>
+      <div class="metric-value">{value}</div>
+    </div>
+    """
+
+
+def feature_table_html(df: pd.DataFrame) -> str:
+    rows = "".join(
+        f"<tr><td>{html.escape(str(row.feature))}</td><td>{row.importance:.4f}</td></tr>"
+        for row in df.itertuples(index=False)
+    )
+    return f"""
+    <div class="table-shell">
+      <table class="data-table">
+        <thead>
+          <tr><th>Feature</th><th>Importance</th></tr>
+        </thead>
+        <tbody>
+          {rows}
+        </tbody>
+      </table>
+    </div>
+    """
+
+
 def apply_css(theme_name: str) -> None:
     t = THEMES[theme_name]
     st.markdown(
@@ -109,7 +145,9 @@ def apply_css(theme_name: str) -> None:
           --panel-strong: {t["panel_strong"]};
           --panel-soft: {t["panel_soft"]};
           --text: {t["text"]};
+          --label: {t["label"]};
           --muted: {t["muted"]};
+          --subtle: {t["subtle"]};
           --stroke: {t["stroke"]};
           --stroke-strong: {t["stroke_strong"]};
           --accent: {t["accent"]};
@@ -124,8 +162,32 @@ def apply_css(theme_name: str) -> None:
           --tab-active-text: {t["tab_active_text"]};
         }}
 
-        html, body, [class*="st-"] {{
+        html, body {{
           font-family: 'Space Grotesk', sans-serif;
+        }}
+
+        .stApp,
+        .stApp p,
+        .stApp li,
+        .stApp label,
+        .stApp input,
+        .stApp textarea,
+        .stApp [data-testid="stMarkdownContainer"] *,
+        .stApp [data-testid="stCaptionContainer"] *,
+        .stApp [data-testid="stMetricLabel"] *,
+        .stApp [data-testid="stMetricValue"] * {{
+          font-family: 'Space Grotesk', sans-serif;
+        }}
+
+        .material-icons,
+        .material-icons-round,
+        .material-icons-outlined,
+        .material-symbols-rounded,
+        .material-symbols-outlined,
+        [class*="material-symbol"] {{
+          font-family: "Material Symbols Rounded" !important;
+          font-feature-settings: 'liga' !important;
+          -webkit-font-feature-settings: 'liga' !important;
         }}
 
         .stApp {{
@@ -150,6 +212,13 @@ def apply_css(theme_name: str) -> None:
           display: none;
         }}
 
+        [data-testid="collapsedControl"],
+        [data-testid="stSidebarCollapseButton"],
+        button[aria-label="Open sidebar"],
+        button[aria-label="Close sidebar"] {{
+          display: none !important;
+        }}
+
         .block-container {{
           padding-top: 2rem;
           padding-bottom: 3rem;
@@ -166,7 +235,7 @@ def apply_css(theme_name: str) -> None:
 
         .sidebar-kicker {{
           font-family: 'IBM Plex Mono', monospace;
-          color: var(--muted);
+          color: var(--label);
           font-size: 0.78rem;
           letter-spacing: 0.08em;
           text-transform: uppercase;
@@ -175,13 +244,13 @@ def apply_css(theme_name: str) -> None:
 
         .brand-title {{
           margin: 0;
-          color: var(--text);
+          color: var(--text) !important;
           font-size: 2.2rem;
           line-height: 1;
         }}
 
         .brand-copy {{
-          color: var(--muted);
+          color: var(--muted) !important;
           margin: 10px 0 0 0;
           font-size: 1rem;
           line-height: 1.55;
@@ -198,7 +267,7 @@ def apply_css(theme_name: str) -> None:
 
         .hero-kicker {{
           font-family: 'IBM Plex Mono', monospace;
-          color: var(--muted);
+          color: var(--label);
           letter-spacing: 0.08em;
           text-transform: uppercase;
           font-size: 0.82rem;
@@ -210,7 +279,7 @@ def apply_css(theme_name: str) -> None:
           font-size: clamp(2.8rem, 4.8vw, 4.7rem);
           line-height: 0.98;
           margin: 0;
-          color: var(--text);
+          color: var(--text) !important;
           text-align: center;
         }}
 
@@ -218,7 +287,7 @@ def apply_css(theme_name: str) -> None:
           margin: 16px auto 16px auto;
           max-width: 920px;
           text-align: center;
-          color: var(--muted);
+          color: var(--muted) !important;
           font-size: 1.16rem;
           line-height: 1.55;
         }}
@@ -244,7 +313,7 @@ def apply_css(theme_name: str) -> None:
 
         .snapshot-label {{
           font-family: 'IBM Plex Mono', monospace;
-          color: var(--muted);
+          color: var(--label);
           font-size: 0.76rem;
           letter-spacing: 0.08em;
           text-transform: uppercase;
@@ -252,9 +321,45 @@ def apply_css(theme_name: str) -> None:
         }}
 
         .snapshot-value {{
-          color: var(--text);
+          color: var(--text) !important;
           font-size: 1.02rem;
           line-height: 1.45;
+        }}
+
+        .metric-card {{
+          background: var(--panel);
+          border: 1px solid var(--stroke);
+          border-radius: 22px;
+          padding: 16px 18px 18px 18px;
+          box-shadow: var(--shadow);
+          min-height: 144px;
+        }}
+
+        .metric-card-compact {{
+          min-height: 120px;
+        }}
+
+        .metric-head {{
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          margin-bottom: 12px;
+        }}
+
+        .metric-name {{
+          color: var(--label) !important;
+          font-size: 1.05rem;
+          line-height: 1.2;
+          font-weight: 500;
+        }}
+
+        .metric-value {{
+          color: var(--text) !important;
+          font-size: clamp(2rem, 2.8vw, 3rem);
+          line-height: 1;
+          font-weight: 700;
+          letter-spacing: -0.03em;
         }}
 
         .section-card {{
@@ -274,14 +379,14 @@ def apply_css(theme_name: str) -> None:
         }}
 
         .section-title {{
-          color: var(--text);
+          color: var(--text) !important;
           font-size: 1.35rem;
           font-weight: 700;
           margin: 0;
         }}
 
         .section-copy {{
-          color: var(--muted);
+          color: var(--muted) !important;
           font-size: 0.98rem;
           line-height: 1.55;
           margin: 0;
@@ -295,40 +400,37 @@ def apply_css(theme_name: str) -> None:
           justify-content: center;
           border-radius: 999px;
           border: 1px solid var(--stroke-strong);
-          color: var(--muted);
+          color: var(--label);
           font-family: 'IBM Plex Mono', monospace;
           font-size: 0.78rem;
           cursor: help;
           background: var(--panel-soft);
         }}
 
-        div[data-testid="stMetric"] {{
-          background: var(--panel);
-          border: 1px solid var(--stroke);
-          border-radius: 22px;
-          padding: 14px 16px;
-          box-shadow: var(--shadow);
-        }}
-
-        div[data-testid="stMetricLabel"] {{
-          color: var(--muted) !important;
-        }}
-
-        div[data-testid="stMetricValue"] {{
+        .info-dot:hover {{
+          border-color: var(--accent);
+          background: var(--accent-soft);
           color: var(--text) !important;
+        }}
+
+        .stTabs [data-baseweb="tab-border"] {{
+          background: var(--stroke) !important;
         }}
 
         .stTabs [data-baseweb="tab-list"] {{
-          gap: 12px;
+          gap: 14px;
         }}
 
         .stTabs [data-baseweb="tab"] {{
-          background: var(--tab-bg);
-          border: 1px solid var(--stroke);
-          border-radius: 18px 18px 0 0;
+          min-height: 54px;
+          background: var(--panel) !important;
+          border: 1px solid var(--stroke) !important;
+          border-radius: 18px 18px 0 0 !important;
           color: var(--text) !important;
-          padding: 10px 18px 11px 18px;
-          font-weight: 600;
+          padding: 10px 20px 11px 20px !important;
+          font-weight: 700 !important;
+          opacity: 1 !important;
+          box-shadow: none !important;
         }}
 
         .stTabs [data-baseweb="tab"] *,
@@ -337,11 +439,13 @@ def apply_css(theme_name: str) -> None:
         .stTabs [data-baseweb="tab"] div {{
           color: var(--text) !important;
           -webkit-text-fill-color: var(--text) !important;
+          opacity: 1 !important;
         }}
 
         .stTabs [data-baseweb="tab"]:hover {{
           background: var(--accent-soft);
           color: var(--text) !important;
+          border-color: var(--accent) !important;
         }}
 
         .stTabs [data-baseweb="tab"]:hover *,
@@ -352,18 +456,20 @@ def apply_css(theme_name: str) -> None:
           -webkit-text-fill-color: var(--text) !important;
         }}
 
-        .stTabs [aria-selected="true"] {{
+        .stTabs [data-baseweb="tab"][aria-selected="true"] {{
           background: var(--tab-active-bg) !important;
           color: var(--tab-active-text) !important;
-          border-color: transparent !important;
+          border-color: var(--tab-active-bg) !important;
+          opacity: 1 !important;
         }}
 
-        .stTabs [aria-selected="true"] *,
-        .stTabs [aria-selected="true"] p,
-        .stTabs [aria-selected="true"] span,
-        .stTabs [aria-selected="true"] div {{
+        .stTabs [data-baseweb="tab"][aria-selected="true"] *,
+        .stTabs [data-baseweb="tab"][aria-selected="true"] p,
+        .stTabs [data-baseweb="tab"][aria-selected="true"] span,
+        .stTabs [data-baseweb="tab"][aria-selected="true"] div {{
           color: var(--tab-active-text) !important;
           -webkit-text-fill-color: var(--tab-active-text) !important;
+          opacity: 1 !important;
         }}
 
         .stTabs [data-baseweb="tab-highlight"] {{
@@ -373,7 +479,7 @@ def apply_css(theme_name: str) -> None:
         .stSelectbox label,
         .stToggle label,
         .stExpander label {{
-          color: var(--muted) !important;
+          color: var(--label) !important;
           font-family: 'IBM Plex Mono', monospace !important;
           font-size: 0.76rem !important;
           letter-spacing: 0.08em !important;
@@ -399,23 +505,34 @@ def apply_css(theme_name: str) -> None:
           box-shadow: var(--shadow) !important;
         }}
 
+        div[data-baseweb="popover"] *,
+        div[data-baseweb="menu"] *,
+        div[role="listbox"] {{
+          color: var(--text) !important;
+        }}
+
+        div[data-baseweb="menu"],
+        ul[role="listbox"],
         div[role="listbox"] {{
           background: var(--panel-strong) !important;
-          color: var(--text) !important;
         }}
 
+        li[role="option"],
         div[role="option"] {{
           color: var(--text) !important;
-          background: transparent !important;
+          background: var(--panel-strong) !important;
         }}
 
-        div[role="option"]:hover {{
+        li[role="option"]:hover,
+        div[role="option"]:hover,
+        li[role="option"][aria-selected="true"],
+        div[role="option"][aria-selected="true"] {{
           background: var(--accent-soft) !important;
           color: var(--text) !important;
         }}
 
         .stTextInput label {{
-          color: var(--muted) !important;
+          color: var(--label) !important;
         }}
 
         .stTextInput input {{
@@ -429,19 +546,39 @@ def apply_css(theme_name: str) -> None:
           color: var(--text) !important;
         }}
 
+        .stToggle [data-baseweb="switch"] > div {{
+          background: var(--panel-soft) !important;
+          border: 1px solid var(--stroke-strong) !important;
+        }}
+
+        .stToggle [data-baseweb="switch"] [data-testid="stMarkdownContainer"] {{
+          color: var(--text) !important;
+        }}
+
         [data-testid="stWidgetLabel"] {{
-          color: var(--muted) !important;
+          color: var(--label) !important;
           font-family: 'IBM Plex Mono', monospace !important;
           letter-spacing: 0.08em !important;
           text-transform: uppercase !important;
+        }}
+
+        [data-baseweb="slider"] * {{
+          color: var(--text) !important;
+        }}
+
+        [data-baseweb="slider"] [role="slider"] {{
+          box-shadow: none !important;
         }}
 
         [data-testid="stSelectSlider"] * {{
           color: var(--text) !important;
         }}
 
-        [data-testid="stCaptionContainer"] p {{
-          color: var(--muted) !important;
+        [data-testid="stCaptionContainer"] p,
+        .utility-note {{
+          color: var(--subtle) !important;
+          font-size: 0.98rem;
+          line-height: 1.45;
         }}
 
         [data-testid="stExpander"] {{
@@ -460,9 +597,52 @@ def apply_css(theme_name: str) -> None:
           overflow: hidden;
         }}
 
+        .table-shell {{
+          background: var(--panel);
+          border: 1px solid var(--stroke);
+          border-radius: 22px;
+          overflow: hidden;
+          box-shadow: var(--shadow);
+        }}
+
+        .data-table {{
+          width: 100%;
+          border-collapse: collapse;
+        }}
+
+        .data-table th {{
+          background: var(--panel-soft);
+          color: var(--label);
+          text-align: left;
+          font-family: 'IBM Plex Mono', monospace;
+          font-size: 0.76rem;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          padding: 14px 16px;
+        }}
+
+        .data-table td {{
+          color: var(--text);
+          padding: 14px 16px;
+          border-top: 1px solid var(--stroke);
+          font-size: 0.98rem;
+          line-height: 1.45;
+        }}
+
+        .data-table tbody tr:nth-child(even) td {{
+          background: var(--panel-soft);
+        }}
+
+        .stDataFrame *,
+        [data-testid="stDataFrame"] *,
+        [data-testid="stImage"] * {{
+          color: var(--text) !important;
+        }}
+
         .mini-note {{
-          color: var(--muted);
-          font-size: 0.92rem;
+          color: var(--subtle);
+          font-size: 0.94rem;
+          line-height: 1.55;
           margin-top: 6px;
         }}
 
@@ -479,6 +659,11 @@ def apply_css(theme_name: str) -> None:
           padding-left: 1.1rem;
           color: var(--muted);
           line-height: 1.65;
+        }}
+
+        .use-card li {{
+          color: var(--muted) !important;
+          margin-bottom: 0.4rem;
         }}
         </style>
         """,
@@ -638,7 +823,7 @@ def render_overview(
     ]
     for col, (label, value, help_text) in zip(metric_cols, metrics):
         with col:
-            st.metric(label, value, help=help_text, border=True)
+            st.markdown(metric_card(label, value, help_text), unsafe_allow_html=True)
 
     left, right = st.columns([1.08, 0.92])
     with left:
@@ -647,7 +832,11 @@ def render_overview(
             "This view compares the ranking strength of the saved candidate models on the same held-out test set.",
             "See how the selected scoring model ranks suspicious claims relative to the other saved candidates.",
         )
-        st.plotly_chart(plot_model_comparison(comparison_df, theme_name), use_container_width=True)
+        st.plotly_chart(
+            plot_model_comparison(comparison_df, theme_name),
+            use_container_width=True,
+            config={"displayModeBar": False},
+        )
     with right:
         section_header(
             "Precision-recall curve",
@@ -670,7 +859,7 @@ def render_overview(
     ]
     for col, (label, value, help_text) in zip(confusion_cols, confusion):
         with col:
-            st.metric(label, f"{value}", help=help_text, border=True)
+            st.markdown(metric_card(label, f"{value}", help_text, compact=True), unsafe_allow_html=True)
 
 
 def render_threshold_explorer(theme_name: str, summary: dict, threshold_df: pd.DataFrame) -> None:
@@ -696,7 +885,7 @@ def render_threshold_explorer(theme_name: str, summary: dict, threshold_df: pd.D
     ]
     for col, (label, value, help_text) in zip(metric_cols, metrics):
         with col:
-            st.metric(label, value, help=help_text, border=True)
+            st.markdown(metric_card(label, value, help_text), unsafe_allow_html=True)
 
     left, right = st.columns([1.08, 0.92])
     with left:
@@ -708,6 +897,7 @@ def render_threshold_explorer(theme_name: str, summary: dict, threshold_df: pd.D
         st.plotly_chart(
             plot_threshold_tradeoff(threshold_df, theme_name, selected_threshold),
             use_container_width=True,
+            config={"displayModeBar": False},
         )
     with right:
         section_header(
@@ -716,11 +906,28 @@ def render_threshold_explorer(theme_name: str, summary: dict, threshold_df: pd.D
             "This panel converts a score cutoff into queue size and likely review outcome.",
         )
         c1, c2 = st.columns(2)
-        c1.metric("F1", format_metric(active["f1"]), help="Balance between precision and recall.", border=True)
-        c2.metric("F2", format_metric(active["f2"]), help="Recall-weighted variant of F1.", border=True)
+        c1.markdown(
+            metric_card("F1", format_metric(active["f1"]), "Balance between precision and recall.", compact=True),
+            unsafe_allow_html=True,
+        )
+        c2.markdown(
+            metric_card("F2", format_metric(active["f2"]), "Recall-weighted variant of F1.", compact=True),
+            unsafe_allow_html=True,
+        )
         c3, c4 = st.columns(2)
-        c3.metric("Missed fraud", f"{int(active['fn'])}", help="Fraud cases not caught at this threshold.", border=True)
-        c4.metric("Clean claims cleared", f"{int(active['tn'])}", help="Legitimate claims left out of review.", border=True)
+        c3.markdown(
+            metric_card("Missed fraud", f"{int(active['fn'])}", "Fraud cases not caught at this threshold.", compact=True),
+            unsafe_allow_html=True,
+        )
+        c4.markdown(
+            metric_card(
+                "Clean claims cleared",
+                f"{int(active['tn'])}",
+                "Legitimate claims left out of review.",
+                compact=True,
+            ),
+            unsafe_allow_html=True,
+        )
         st.markdown(
             '<div class="mini-note">Tip: a lower threshold increases the review queue quickly. A higher threshold protects analyst capacity but lets more fraud slip through.</div>',
             unsafe_allow_html=True,
@@ -742,21 +949,26 @@ def render_risk_drivers(theme_name: str, feature_df: pd.DataFrame) -> None:
             "Feature importance shows which signals had the strongest influence on the model's fraud ranking.",
             "These are the strongest signals pushing a claim higher in the risk queue.",
         )
-        st.plotly_chart(plot_feature_importance(feature_df, theme_name), use_container_width=True)
+        st.plotly_chart(
+            plot_feature_importance(feature_df, theme_name),
+            use_container_width=True,
+            config={"displayModeBar": False},
+        )
     with right:
         section_header(
             "Top 10 features",
             "This table keeps the strongest signals readable without scrolling through the full feature list.",
             "Use this table for a quick read on the most influential model inputs.",
         )
-        preview = feature_df.head(10).copy()
-        preview["importance"] = preview["importance"].map(lambda x: f"{x:.4f}")
-        st.dataframe(preview, use_container_width=True, hide_index=True)
+        st.markdown(feature_table_html(feature_df.head(10)), unsafe_allow_html=True)
 
 
 def main() -> None:
     if "dark_mode" not in st.session_state:
         st.session_state["dark_mode"] = False
+
+    theme_name = "Dark" if st.session_state["dark_mode"] else "Light"
+    apply_css(theme_name)
 
     with st.sidebar:
         st.markdown(
@@ -788,7 +1000,6 @@ def main() -> None:
         )
 
     theme_name = "Dark" if st.session_state["dark_mode"] else "Light"
-    apply_css(theme_name)
 
     model_key = MODEL_KEYS[model_label]
     summary = load_json(ARTIFACT_DIR / f"{model_key}_summary.json")
@@ -846,7 +1057,10 @@ def main() -> None:
                 unsafe_allow_html=True,
             )
 
-    st.caption("Hover the small info markers for quick definitions.")
+    st.markdown(
+        '<div class="utility-note">Hover the info markers for quick definitions.</div>',
+        unsafe_allow_html=True,
+    )
 
     tab_overview, tab_threshold, tab_drivers = st.tabs(
         ["Overview", "Threshold Explorer", "Risk Drivers"]
