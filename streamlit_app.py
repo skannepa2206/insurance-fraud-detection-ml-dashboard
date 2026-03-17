@@ -20,52 +20,52 @@ MODEL_KEYS = {
 }
 THEMES = {
     "Light": {
-        "paper": "#f4efe6",
-        "paper_2": "#fbf8f3",
-        "sidebar": "#efe8dc",
-        "panel": "rgba(255,255,255,0.86)",
-        "panel_strong": "#fffdfa",
-        "panel_soft": "#fff9f1",
-        "text": "#151515",
-        "label": "#5a534a",
-        "muted": "#645c53",
-        "subtle": "#7a736a",
-        "stroke": "rgba(24,24,24,0.14)",
-        "stroke_strong": "rgba(24,24,24,0.28)",
-        "accent": "#ff5a52",
-        "accent_soft": "#fff1ef",
-        "accent_text": "#151515",
-        "grid": "rgba(18,18,18,0.08)",
-        "plot_bg": "#fbf8f4",
-        "shadow": "0 18px 40px rgba(0,0,0,0.08)",
-        "chip": "#f8f2e9",
-        "tab_bg": "rgba(255,255,255,0.62)",
-        "tab_active_bg": "#171717",
-        "tab_active_text": "#f7f3eb",
+        "paper": "#f7f9fc",
+        "paper_2": "#ffffff",
+        "sidebar": "#ffffff",
+        "panel": "rgba(255,255,255,0.94)",
+        "panel_strong": "#ffffff",
+        "panel_soft": "#eef5ff",
+        "text": "#1c2b39",
+        "label": "#627589",
+        "muted": "#4f6275",
+        "subtle": "#7f91a6",
+        "stroke": "rgba(28,43,57,0.08)",
+        "stroke_strong": "rgba(28,43,57,0.14)",
+        "accent": "#1877f2",
+        "accent_soft": "#e8f1ff",
+        "accent_text": "#ffffff",
+        "grid": "rgba(28,43,57,0.08)",
+        "plot_bg": "#ffffff",
+        "shadow": "0 18px 40px rgba(28,43,57,0.06)",
+        "chip": "#ffffff",
+        "tab_bg": "#ffffff",
+        "tab_active_bg": "#1877f2",
+        "tab_active_text": "#ffffff",
     },
     "Dark": {
-        "paper": "#0b0b0c",
-        "paper_2": "#111113",
-        "sidebar": "#121214",
-        "panel": "rgba(19,19,21,0.94)",
-        "panel_strong": "#17181b",
-        "panel_soft": "#1b1c1f",
-        "text": "#f4efe7",
-        "label": "#ddd6cc",
-        "muted": "#cbc4ba",
-        "subtle": "#a79f95",
-        "stroke": "rgba(255,255,255,0.14)",
-        "stroke_strong": "rgba(255,255,255,0.26)",
-        "accent": "#ff5a52",
-        "accent_soft": "#2a1414",
-        "accent_text": "#f7f3eb",
-        "grid": "rgba(255,255,255,0.08)",
-        "plot_bg": "#141417",
-        "shadow": "0 18px 40px rgba(0,0,0,0.34)",
-        "chip": "#151518",
-        "tab_bg": "rgba(255,255,255,0.04)",
-        "tab_active_bg": "#f4efe7",
-        "tab_active_text": "#111111",
+        "paper": "#0c1320",
+        "paper_2": "#111a28",
+        "sidebar": "#0f1724",
+        "panel": "rgba(18,27,40,0.94)",
+        "panel_strong": "#142033",
+        "panel_soft": "#18263c",
+        "text": "#f2f7fb",
+        "label": "#bfd0e2",
+        "muted": "#d6e0ea",
+        "subtle": "#8ea0b6",
+        "stroke": "rgba(255,255,255,0.08)",
+        "stroke_strong": "rgba(255,255,255,0.16)",
+        "accent": "#4a90ff",
+        "accent_soft": "rgba(74,144,255,0.18)",
+        "accent_text": "#ffffff",
+        "grid": "rgba(255,255,255,0.07)",
+        "plot_bg": "#101826",
+        "shadow": "0 18px 40px rgba(0,0,0,0.28)",
+        "chip": "#111a28",
+        "tab_bg": "rgba(255,255,255,0.03)",
+        "tab_active_bg": "#4a90ff",
+        "tab_active_text": "#ffffff",
     },
 }
 
@@ -137,7 +137,7 @@ def apply_css(theme_name: str) -> None:
     st.markdown(
         f"""
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
         :root {{
           --paper: {t["paper"]};
@@ -165,7 +165,7 @@ def apply_css(theme_name: str) -> None:
         }}
 
         html, body {{
-          font-family: 'Space Grotesk', sans-serif;
+          font-family: 'Manrope', sans-serif;
         }}
 
         .stApp,
@@ -178,7 +178,7 @@ def apply_css(theme_name: str) -> None:
         .stApp [data-testid="stCaptionContainer"] *,
         .stApp [data-testid="stMetricLabel"] *,
         .stApp [data-testid="stMetricValue"] * {{
-          font-family: 'Space Grotesk', sans-serif;
+          font-family: 'Manrope', sans-serif;
         }}
 
         .material-icons,
@@ -195,14 +195,13 @@ def apply_css(theme_name: str) -> None:
         .stApp {{
           color: var(--text);
           background:
-            radial-gradient(circle at 1px 1px, var(--grid) 1px, transparent 0),
-            linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01)),
-            var(--paper);
-          background-size: 28px 28px, auto, auto;
+            radial-gradient(circle at 22% 16%, color-mix(in srgb, var(--accent) 12%, transparent) 0, transparent 22%),
+            radial-gradient(circle at 78% 10%, color-mix(in srgb, var(--accent) 10%, transparent) 0, transparent 18%),
+            linear-gradient(180deg, var(--paper-2) 0%, var(--paper) 72%);
         }}
 
         [data-testid="stSidebar"] {{
-          background: linear-gradient(180deg, var(--sidebar) 0%, var(--paper-2) 100%);
+          background: linear-gradient(180deg, var(--sidebar) 0%, var(--paper) 100%);
           border-right: 1px solid var(--stroke);
         }}
 
@@ -222,24 +221,25 @@ def apply_css(theme_name: str) -> None:
         }}
 
         .block-container {{
-          padding-top: 2rem;
-          padding-bottom: 3rem;
+          padding-top: 1.35rem;
+          padding-bottom: 3.5rem;
         }}
 
         .brand-card {{
           background: var(--panel);
           border: 1px solid var(--stroke);
-          border-radius: 22px;
-          padding: 18px 18px 16px 18px;
+          border-radius: 28px;
+          padding: 22px 20px 18px 20px;
           box-shadow: var(--shadow);
-          margin-bottom: 18px;
+          margin-bottom: 20px;
         }}
 
         .sidebar-kicker {{
-          font-family: 'IBM Plex Mono', monospace;
+          font-family: 'Manrope', sans-serif;
           color: var(--label);
           font-size: 0.78rem;
-          letter-spacing: 0.08em;
+          font-weight: 700;
+          letter-spacing: 0.12em;
           text-transform: uppercase;
           margin-bottom: 8px;
         }}
@@ -247,67 +247,76 @@ def apply_css(theme_name: str) -> None:
         .brand-title {{
           margin: 0;
           color: var(--text) !important;
-          font-size: 2rem;
-          line-height: 1.05;
+          font-size: 2.05rem;
+          font-weight: 800;
+          letter-spacing: -0.04em;
+          line-height: 1.02;
         }}
 
         .brand-copy {{
           color: var(--muted) !important;
           margin: 10px 0 0 0;
-          font-size: 0.96rem;
-          line-height: 1.5;
+          font-size: 0.97rem;
+          line-height: 1.62;
         }}
 
         .hero {{
-          background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+          background:
+            radial-gradient(circle at 20% 10%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 28%),
+            radial-gradient(circle at 75% 20%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 24%),
+            linear-gradient(180deg, var(--panel-soft) 0%, var(--panel) 100%);
           border: 1px solid var(--stroke);
-          border-radius: 30px;
-          padding: 32px 34px 26px 34px;
+          border-radius: 34px;
+          padding: 44px 48px 38px 48px;
           box-shadow: var(--shadow);
-          margin-bottom: 18px;
+          margin-bottom: 24px;
         }}
 
         .hero-kicker {{
-          font-family: 'IBM Plex Mono', monospace;
+          font-family: 'Manrope', sans-serif;
           color: var(--label);
-          letter-spacing: 0.08em;
+          font-weight: 700;
+          letter-spacing: 0.12em;
           text-transform: uppercase;
-          font-size: 0.82rem;
-          margin-bottom: 12px;
+          font-size: 0.8rem;
+          margin-bottom: 14px;
           text-align: center;
         }}
 
         .hero-title {{
-          font-size: clamp(2.4rem, 4.2vw, 4rem);
-          line-height: 1;
+          font-size: clamp(2.7rem, 5vw, 4.8rem);
+          line-height: 1.04;
           margin: 0;
           color: var(--text) !important;
+          font-weight: 800;
+          letter-spacing: -0.05em;
           text-align: center;
         }}
 
         .hero-subtitle {{
-          margin: 16px auto 16px auto;
-          max-width: 920px;
+          margin: 18px auto 16px auto;
+          max-width: 880px;
           text-align: center;
           color: var(--muted) !important;
-          font-size: 1.04rem;
-          line-height: 1.5;
+          font-size: 1.08rem;
+          line-height: 1.72;
         }}
 
         .hero-divider {{
-          width: 170px;
-          height: 2px;
+          width: 138px;
+          height: 8px;
           margin: 0 auto;
-          background: linear-gradient(90deg, transparent, var(--accent), transparent);
+          border-radius: 999px;
+          background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 25%, transparent), var(--accent), color-mix(in srgb, var(--accent) 25%, transparent));
         }}
 
         .snapshot-chip {{
           background: var(--chip);
           border: 1px solid var(--stroke);
-          border-radius: 18px;
-          padding: 16px 18px;
+          border-radius: 28px;
+          padding: 18px 20px;
           box-shadow: var(--shadow);
-          min-height: 92px;
+          min-height: 102px;
           display: flex;
           flex-direction: column;
           justify-content: center;
@@ -318,36 +327,38 @@ def apply_css(theme_name: str) -> None:
           align-items: center;
           justify-content: space-between;
           gap: 10px;
-          margin-bottom: 8px;
+          margin-bottom: 10px;
         }}
 
         .snapshot-label {{
-          font-family: 'IBM Plex Mono', monospace;
+          font-family: 'Manrope', sans-serif;
           color: var(--label);
-          font-size: 0.76rem;
-          letter-spacing: 0.08em;
+          font-size: 0.79rem;
+          font-weight: 700;
+          letter-spacing: 0.12em;
           text-transform: uppercase;
           margin-bottom: 0;
         }}
 
         .snapshot-value {{
           color: var(--text) !important;
-          font-size: 0.98rem;
-          line-height: 1.4;
+          font-size: 1.04rem;
+          font-weight: 600;
+          line-height: 1.45;
         }}
 
         .metric-card {{
           background: var(--panel);
           border: 1px solid var(--stroke);
-          border-radius: 22px;
-          padding: 16px 18px 18px 18px;
+          border-radius: 28px;
+          padding: 18px 20px 20px 20px;
           box-shadow: var(--shadow);
-          min-height: 132px;
-          margin-bottom: 10px;
+          min-height: 138px;
+          margin-bottom: 12px;
         }}
 
         .metric-card-compact {{
-          min-height: 120px;
+          min-height: 124px;
         }}
 
         .metric-head {{
@@ -360,26 +371,26 @@ def apply_css(theme_name: str) -> None:
 
         .metric-name {{
           color: var(--label) !important;
-          font-size: 0.96rem;
+          font-size: 0.95rem;
           line-height: 1.2;
-          font-weight: 500;
+          font-weight: 700;
         }}
 
         .metric-value {{
           color: var(--text) !important;
-          font-size: clamp(1.85rem, 2.3vw, 2.55rem);
-          line-height: 1;
-          font-weight: 700;
-          letter-spacing: -0.03em;
+          font-size: clamp(2rem, 2.6vw, 2.9rem);
+          line-height: 1.02;
+          font-weight: 800;
+          letter-spacing: -0.05em;
         }}
 
         .section-card {{
           background: var(--panel);
           border: 1px solid var(--stroke);
-          border-radius: 24px;
-          padding: 18px 18px 16px 18px;
+          border-radius: 30px;
+          padding: 22px 22px 18px 22px;
           box-shadow: var(--shadow);
-          margin-bottom: 22px;
+          margin-bottom: 26px;
         }}
 
         .section-row {{
@@ -391,29 +402,31 @@ def apply_css(theme_name: str) -> None:
 
         .section-title {{
           color: var(--text) !important;
-          font-size: 1.2rem;
-          font-weight: 700;
+          font-size: 1.26rem;
+          font-weight: 800;
+          letter-spacing: -0.03em;
           margin: 0;
         }}
 
         .section-copy {{
           color: var(--muted) !important;
-          font-size: 0.94rem;
-          line-height: 1.5;
+          font-size: 0.98rem;
+          line-height: 1.66;
           margin: 0;
         }}
 
         .info-dot {{
-          width: 22px;
-          height: 22px;
+          width: 24px;
+          height: 24px;
           display: inline-flex;
           align-items: center;
           justify-content: center;
           border-radius: 999px;
           border: 1px solid var(--stroke-strong);
           color: var(--label);
-          font-family: 'IBM Plex Mono', monospace;
-          font-size: 0.78rem;
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.8rem;
+          font-weight: 800;
           cursor: help;
           background: var(--panel-soft);
         }}
@@ -429,16 +442,16 @@ def apply_css(theme_name: str) -> None:
         }}
 
         .stTabs [data-baseweb="tab-list"] {{
-          gap: 14px;
+          gap: 12px;
         }}
 
         .stTabs [data-baseweb="tab"] {{
-          min-height: 54px;
+          min-height: 50px;
           background: var(--panel) !important;
           border: 1px solid var(--stroke) !important;
-          border-radius: 18px 18px 0 0 !important;
+          border-radius: 999px !important;
           color: var(--text) !important;
-          padding: 10px 20px 11px 20px !important;
+          padding: 10px 22px !important;
           font-weight: 700 !important;
           opacity: 1 !important;
           box-shadow: none !important;
@@ -472,6 +485,7 @@ def apply_css(theme_name: str) -> None:
           color: var(--tab-active-text) !important;
           border-color: var(--tab-active-bg) !important;
           opacity: 1 !important;
+          box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 26%, transparent) !important;
         }}
 
         .stTabs [data-baseweb="tab"][aria-selected="true"] *,
@@ -492,9 +506,10 @@ def apply_css(theme_name: str) -> None:
         .stToggle label,
         .stExpander label {{
           color: var(--label) !important;
-          font-family: 'IBM Plex Mono', monospace !important;
+          font-family: 'Manrope', sans-serif !important;
           font-size: 0.76rem !important;
-          letter-spacing: 0.08em !important;
+          font-weight: 700 !important;
+          letter-spacing: 0.12em !important;
           text-transform: uppercase !important;
         }}
 
@@ -534,8 +549,10 @@ def apply_css(theme_name: str) -> None:
         div[data-baseweb="select"] > div {{
           background: var(--panel-strong) !important;
           color: var(--text) !important;
-          border-radius: 16px !important;
+          border-radius: 18px !important;
           border: 1px solid var(--stroke-strong) !important;
+          min-height: 52px !important;
+          box-shadow: none !important;
         }}
 
         div[data-baseweb="select"] * {{
@@ -583,7 +600,7 @@ def apply_css(theme_name: str) -> None:
         .stTextInput input {{
           background: var(--panel-strong) !important;
           color: var(--text) !important;
-          border-radius: 16px !important;
+          border-radius: 18px !important;
           border: 1px solid var(--stroke-strong) !important;
         }}
 
@@ -602,8 +619,9 @@ def apply_css(theme_name: str) -> None:
 
         [data-testid="stWidgetLabel"] {{
           color: var(--label) !important;
-          font-family: 'IBM Plex Mono', monospace !important;
-          letter-spacing: 0.08em !important;
+          font-family: 'Manrope', sans-serif !important;
+          font-weight: 700 !important;
+          letter-spacing: 0.12em !important;
           text-transform: uppercase !important;
         }}
 
@@ -638,14 +656,14 @@ def apply_css(theme_name: str) -> None:
 
         [data-testid="stImage"], .stPlotlyChart, .stDataFrame {{
           border: 1px solid var(--stroke);
-          border-radius: 22px;
+          border-radius: 30px;
           overflow: hidden;
         }}
 
         .table-shell {{
           background: var(--panel);
           border: 1px solid var(--stroke);
-          border-radius: 22px;
+          border-radius: 30px;
           overflow: hidden;
           box-shadow: var(--shadow);
         }}
@@ -659,19 +677,20 @@ def apply_css(theme_name: str) -> None:
           background: var(--panel-soft);
           color: var(--label);
           text-align: left;
-          font-family: 'IBM Plex Mono', monospace;
+          font-family: 'Manrope', sans-serif;
           font-size: 0.76rem;
-          letter-spacing: 0.08em;
+          font-weight: 700;
+          letter-spacing: 0.12em;
           text-transform: uppercase;
-          padding: 14px 16px;
+          padding: 16px 18px;
         }}
 
         .data-table td {{
           color: var(--text);
-          padding: 14px 16px;
+          padding: 16px 18px;
           border-top: 1px solid var(--stroke);
           font-size: 0.98rem;
-          line-height: 1.45;
+          line-height: 1.55;
         }}
 
         .data-table tbody tr:nth-child(even) td {{
@@ -686,9 +705,9 @@ def apply_css(theme_name: str) -> None:
 
         .mini-note {{
           color: var(--subtle);
-          font-size: 0.94rem;
-          line-height: 1.55;
-          margin-top: 6px;
+          font-size: 0.96rem;
+          line-height: 1.68;
+          margin-top: 10px;
         }}
 
         .stack-gap {{
@@ -702,8 +721,8 @@ def apply_css(theme_name: str) -> None:
         .use-card {{
           background: var(--panel);
           border: 1px solid var(--stroke);
-          border-radius: 20px;
-          padding: 14px 16px;
+          border-radius: 24px;
+          padding: 16px 18px;
           box-shadow: var(--shadow);
         }}
 
