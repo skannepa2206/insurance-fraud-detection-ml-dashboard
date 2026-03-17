@@ -214,7 +214,14 @@ def apply_css(theme_name: str) -> None:
           display: none;
         }}
 
-        [data-testid="collapsedControl"],
+        [data-testid="collapsedControl"] {{
+          position: fixed !important;
+          top: 0.95rem !important;
+          left: 0.95rem !important;
+          z-index: 1000 !important;
+        }}
+
+        [data-testid="collapsedControl"] button,
         [data-testid="stSidebarCollapseButton"],
         button[aria-label="Open sidebar"],
         button[aria-label="Close sidebar"] {{
@@ -223,44 +230,55 @@ def apply_css(theme_name: str) -> None:
           justify-content: center !important;
           width: 38px !important;
           height: 38px !important;
+          min-width: 38px !important;
+          min-height: 38px !important;
           border: 1px solid var(--stroke-strong) !important;
           border-radius: 999px !important;
           background: var(--panel) !important;
-          color: var(--text) !important;
           box-shadow: var(--shadow) !important;
           visibility: visible !important;
           opacity: 1 !important;
-          z-index: 20 !important;
+          color: transparent !important;
+          font-size: 0 !important;
+          line-height: 0 !important;
+          position: relative !important;
+          z-index: 1000 !important;
         }}
 
-        [data-testid="collapsedControl"] svg,
+        [data-testid="stSidebarCollapseButton"] {{
+          margin-left: auto !important;
+        }}
+
+        [data-testid="collapsedControl"] button svg,
         [data-testid="stSidebarCollapseButton"] svg,
         button[aria-label="Open sidebar"] svg,
         button[aria-label="Close sidebar"] svg {{
           display: none !important;
         }}
 
-        button[aria-label="Open sidebar"]::after,
-        [data-testid="collapsedControl"] button::after {{
+        [data-testid="collapsedControl"] button::after,
+        button[aria-label="Open sidebar"]::after {{
           content: ">>";
           font-family: '{FONT_FAMILY}', sans-serif !important;
           font-size: 0.82rem !important;
           font-weight: 700 !important;
           letter-spacing: -0.04em !important;
+          line-height: 1 !important;
           color: var(--text) !important;
         }}
 
-        button[aria-label="Close sidebar"]::after,
-        [data-testid="stSidebarCollapseButton"]::after {{
+        [data-testid="stSidebarCollapseButton"]::after,
+        button[aria-label="Close sidebar"]::after {{
           content: "<<";
           font-family: '{FONT_FAMILY}', sans-serif !important;
           font-size: 0.82rem !important;
           font-weight: 700 !important;
           letter-spacing: -0.04em !important;
+          line-height: 1 !important;
           color: var(--text) !important;
         }}
 
-        [data-testid="collapsedControl"]:hover,
+        [data-testid="collapsedControl"] button:hover,
         [data-testid="stSidebarCollapseButton"]:hover,
         button[aria-label="Open sidebar"]:hover,
         button[aria-label="Close sidebar"]:hover {{
