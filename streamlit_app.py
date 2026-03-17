@@ -72,7 +72,7 @@ THEMES = {
 
 st.set_page_config(
     page_title="Insurance Fraud Risk Dashboard",
-    page_icon="🛡️",
+    page_icon="AF",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -334,7 +334,8 @@ def apply_css(theme_name: str) -> None:
           border-radius: 22px;
           padding: 16px 18px 18px 18px;
           box-shadow: var(--shadow);
-          min-height: 144px;
+          min-height: 132px;
+          margin-bottom: 10px;
         }}
 
         .metric-card-compact {{
@@ -370,7 +371,7 @@ def apply_css(theme_name: str) -> None:
           border-radius: 24px;
           padding: 18px 18px 16px 18px;
           box-shadow: var(--shadow);
-          margin-bottom: 18px;
+          margin-bottom: 22px;
         }}
 
         .section-row {{
@@ -683,7 +684,11 @@ def apply_css(theme_name: str) -> None:
         }}
 
         .stack-gap {{
-          height: 18px;
+          height: 24px;
+        }}
+
+        .stack-gap-sm {{
+          height: 10px;
         }}
 
         .use-card {{
@@ -745,9 +750,11 @@ def plot_model_comparison(df: pd.DataFrame, theme_name: str) -> go.Figure:
             marker_color=[palette["accent"], "#ff8a7d", "#d9b15a", "#8b8b8b"],
             text=[f"{v:.3f}" for v in chart["test_average_precision"]],
             textposition="outside",
+            cliponaxis=False,
             hovertemplate="<b>%{x}</b><br>Average precision: %{y:.3f}<extra></extra>",
         )
     )
+    max_value = float(chart["test_average_precision"].max())
     fig.update_layout(
         title="Model ranking quality",
         paper_bgcolor="rgba(0,0,0,0)",
@@ -757,7 +764,7 @@ def plot_model_comparison(df: pd.DataFrame, theme_name: str) -> go.Figure:
         height=360,
         yaxis_title="Test average precision",
     )
-    fig.update_yaxes(gridcolor=palette["grid"])
+    fig.update_yaxes(gridcolor=palette["grid"], range=[0, max_value * 1.18])
     return fig
 
 
@@ -865,6 +872,8 @@ def render_overview(
         with col:
             st.markdown(metric_card(label, value, help_text), unsafe_allow_html=True)
 
+    st.markdown('<div class="stack-gap"></div>', unsafe_allow_html=True)
+
     left, right = st.columns([1.08, 0.92])
     with left:
         section_header(
@@ -928,6 +937,8 @@ def render_threshold_explorer(theme_name: str, summary: dict, threshold_df: pd.D
     for col, (label, value, help_text) in zip(metric_cols, metrics):
         with col:
             st.markdown(metric_card(label, value, help_text), unsafe_allow_html=True)
+
+    st.markdown('<div class="stack-gap"></div>', unsafe_allow_html=True)
 
     left, right = st.columns([1.08, 0.92])
     with left:
@@ -1010,6 +1021,8 @@ def render_risk_drivers(theme_name: str, feature_df: pd.DataFrame) -> None:
 def main() -> None:
     if "dark_mode" not in st.session_state:
         st.session_state["dark_mode"] = False
+    if "_last_dark_mode" not in st.session_state:
+        st.session_state["_last_dark_mode"] = st.session_state["dark_mode"]
 
     theme_name = "Dark" if st.session_state["dark_mode"] else "Light"
     apply_css(theme_name)
@@ -1033,12 +1046,13 @@ def main() -> None:
         st.session_state["dark_mode"] = dark_mode
         model_options = list(MODEL_KEYS.keys())
         default_index = model_options.index("XGBoost")
-        model_label = st.radio(
+        model_label = st.selectbox(
             "Scoring model",
             model_options,
             index=default_index,
             help="Switch between the saved model outputs used in the analysis.",
         )
+        st.markdown('<div class="stack-gap-sm"></div>', unsafe_allow_html=True)
         show_guide = st.toggle(
             "How to use",
             value=False,
@@ -1046,6 +1060,11 @@ def main() -> None:
         )
 
     theme_name = "Dark" if st.session_state["dark_mode"] else "Light"
+    apply_css(theme_name)
+
+    if st.session_state["dark_mode"] != st.session_state["_last_dark_mode"]:
+        st.session_state["_last_dark_mode"] = st.session_state["dark_mode"]
+        st.rerun()
 
     model_key = MODEL_KEYS[model_label]
     summary = load_json(ARTIFACT_DIR / f"{model_key}_summary.json")
@@ -1055,6 +1074,7 @@ def main() -> None:
 
     if show_guide:
         with st.sidebar:
+            st.markdown('<div class="stack-gap-sm"></div>', unsafe_allow_html=True)
             st.markdown(
                 """
                 <div class="use-card">
