@@ -1,77 +1,54 @@
-# Insurance Fraud Detection ML Dashboard
+# Insurance Fraud Detection Dashboard
 
-This repository contains the modeling workflow, generated evaluation artifacts, and a Streamlit dashboard for an auto insurance fraud detection project focused on imbalanced classification, precision-recall analysis, and threshold selection.
+This project explores auto insurance fraud screening with tree-based and linear classifiers, threshold tuning, and an interactive Streamlit dashboard for reviewing model behavior.
 
-## Repository contents
+Live dashboard: https://insurance-fraud-detection-ml-dashboard.streamlit.app/  
+Source code: https://github.com/skannepa2206/insurance-fraud-detection-ml-dashboard
 
-- `streamlit_app.py`: dashboard for viewing the assignment results
-- `scripts/fraud_detection_assignment.py`: local training and evaluation workflow
-- `scripts/generate_submission_visuals.py`: script that generates supporting charts
-- `artifacts/`: saved metrics, figures, and model output files used in the paper and dashboard
+## Repository structure
 
-## What is intentionally not included
+- `streamlit_app.py` - interactive dashboard built on the saved artifacts
+- `scripts/train_models.py` - trains the models, selects thresholds, and writes output files
+- `scripts/build_visuals.py` - builds the summary charts used in the dashboard and write-up
+- `artifacts/` - saved summaries, threshold tables, feature importance files, and figures
+- `data/` - local copy of `train.csv` and `test.csv`
 
-- The original course-provided `train.csv` and `test.csv` files are not included by default.
-- The local virtual environment and unrelated project files are excluded.
+## Modeling approach
 
-If the instructor needs full reproduction, the course datasets should be placed in:
+The workflow trains and compares:
 
-```text
-data/
-  train.csv
-  test.csv
-```
+- XGBoost
+- Random Forest
+- CatBoost
+- Logistic Regression
 
-Then the training script can be adapted to point at that location or the original local dataset path can be changed.
+The evaluation focuses on precision-recall behavior because fraud is a rare event in the dataset. Threshold selection is based on the validation split and can be optimized with either `F1` or `F2`.
 
-## Dashboard
+## Run the dashboard
 
 ```powershell
 pip install -r requirements.txt
 streamlit run streamlit_app.py
 ```
 
-The dashboard presents:
-
-- benchmark comparison across multiple classifiers
-- validation-based threshold selection
-- precision-recall evidence for the XGBoost submission model
-- feature importance and downloadable output artifacts
-
-## Streamlit Community Cloud deployment
-
-This repository is set up so the deployed app only installs the packages needed for the dashboard itself.
-
-- `requirements.txt`: minimal dependencies for Streamlit Community Cloud
-- `requirements-full.txt`: full local environment for rerunning the modeling scripts
-
-For deployment:
-
-1. Go to `https://share.streamlit.io/`
-2. Click `Create app`
-3. Select this repository: `skannepa2206/insurance-fraud-detection-ml-dashboard`
-4. Set branch to `main`
-5. Set main file path to `streamlit_app.py`
-6. Optionally choose a custom subdomain
-7. In `Advanced settings`, keep the default unless you need a specific Python version
-8. Click `Deploy`
-
-Suggested custom subdomains:
-
-- `insurance-fraud-dashboard`
-- `auto-fraud-ml-dashboard`
-- `veena-insurance-fraud-dashboard`
-
-## Recreate the analysis artifacts
-
-If the datasets are available locally, the analysis and figure scripts can be run with:
+## Refresh the model artifacts
 
 ```powershell
-pip install -r requirements-full.txt
-python scripts/fraud_detection_assignment.py --model xgboost
-python scripts/generate_submission_visuals.py
+pip install -r requirements-modeling.txt
+python scripts/train_models.py
+python scripts/build_visuals.py
 ```
 
-## Project note
+Useful options:
 
-The Streamlit dashboard is designed as a concise review layer so the results, threshold logic, model comparison, and generated visuals can be inspected quickly without reading through raw output files first.
+```powershell
+python scripts/train_models.py --model xgboost
+python scripts/train_models.py --model best
+python scripts/train_models.py --threshold-objective f2
+```
+
+## Notes
+
+- `requirements.txt` is kept minimal for the deployed Streamlit app.
+- `requirements-modeling.txt` includes the extra libraries needed to rerun the training workflow locally.
+- The dashboard reads from the files in `artifacts/`, so the app does not need to retrain models at runtime.

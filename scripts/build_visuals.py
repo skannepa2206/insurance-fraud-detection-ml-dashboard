@@ -10,7 +10,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-OUTPUT_DIR = Path("assignment_outputs") / "fraud_detection"
+ROOT_DIR = Path(__file__).resolve().parents[1]
+OUTPUT_DIR = ROOT_DIR / "artifacts"
 
 
 def plot_model_comparison() -> None:

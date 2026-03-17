@@ -38,8 +38,9 @@ except ImportError:  # pragma: no cover - optional dependency
     CatBoostClassifier = None
 
 
-DEFAULT_DATA_DIR = Path(r"C:\Users\Veena\Downloads\AISystems_Mod4\Auto_fraud_detection_dataset")
-DEFAULT_OUTPUT_DIR = Path("assignment_outputs") / "fraud_detection"
+ROOT_DIR = Path(__file__).resolve().parents[1]
+DEFAULT_DATA_DIR = ROOT_DIR / "data"
+DEFAULT_OUTPUT_DIR = ROOT_DIR / "artifacts"
 MODEL_ORDER = ("xgboost", "random_forest", "logistic", "catboost")
 
 
@@ -51,8 +52,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument(
         "--model",
-        choices=("xgboost", "random_forest", "logistic", "catboost", "best"),
-        default="xgboost",
+        choices=("xgboost", "random_forest", "logistic", "catboost", "best", "all"),
+        default="all",
     )
     parser.add_argument(
         "--threshold-objective",
@@ -308,6 +309,91 @@ def write_json(payload: dict[str, object], output_path: Path) -> None:
     output_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
+def target_model_names(requested_model: str, comparison: pd.DataFrame) -> list[str]:
+    if requested_model == "all":
+        return comparison["model"].tolist()
+    return [selected_model_name(requested_model, comparison)]
+
+
+def build_model_summary(
+    model_name: str,
+    artifacts: dict[str, object],
+    feature_importance: pd.DataFrame,
+    train_df: pd.DataFrame,
+    test_df: pd.DataFrame,
+    y: pd.Series,
+    y_test: pd.Series,
+    data_dir: Path,
+    threshold_objective: str,
+) -> dict[str, object]:
+    return {
+        "data_dir": str(data_dir),
+        "selected_model": model_name,
+        "threshold_objective": threshold_objective,
+        "train_shape": list(train_df.shape),
+        "test_shape": list(test_df.shape),
+        "train_fraud_rate": float(y.mean()),
+        "test_fraud_rate": float(y_test.mean()),
+        "validation_threshold_choice": artifacts["threshold_choice"],
+        "validation_metrics_at_selected_threshold": artifacts["val_metrics"],
+        "test_metrics_at_selected_threshold": artifacts["test_metrics"],
+        "test_average_precision": float(
+            average_precision_score(y_test, artifacts["test_probabilities"])
+        ),
+        "test_roc_auc": float(roc_auc_score(y_test, artifacts["test_probabilities"])),
+        "top_features": feature_importance.head(10).to_dict(orient="records"),
+    }
+
+
+def write_model_outputs(
+    model_name: str,
+    artifacts: dict[str, object],
+    X_columns: list[str],
+    train_df: pd.DataFrame,
+    test_df: pd.DataFrame,
+    y: pd.Series,
+    y_val: pd.Series,
+    y_test: pd.Series,
+    output_dir: Path,
+    data_dir: Path,
+    threshold_objective: str,
+) -> None:
+    chosen_threshold = float(artifacts["threshold_choice"]["threshold"])
+
+    build_threshold_table(
+        y_true=y_test,
+        probabilities=artifacts["test_probabilities"],
+        chosen_threshold=chosen_threshold,
+    ).to_csv(output_dir / f"{model_name}_threshold_table.csv", index=False)
+
+    feature_importance = extract_feature_importance(
+        artifacts["model"], X_columns
+    )
+    feature_importance.to_csv(output_dir / f"{model_name}_feature_importance.csv", index=False)
+
+    plot_precision_recall(
+        y_val=y_val,
+        val_probabilities=artifacts["val_probabilities"],
+        y_test=y_test,
+        test_probabilities=artifacts["test_probabilities"],
+        chosen_threshold=chosen_threshold,
+        output_path=output_dir / f"{model_name}_precision_recall_curve.png",
+    )
+
+    summary = build_model_summary(
+        model_name=model_name,
+        artifacts=artifacts,
+        feature_importance=feature_importance,
+        train_df=train_df,
+        test_df=test_df,
+        y=y,
+        y_test=y_test,
+        data_dir=data_dir,
+        threshold_objective=threshold_objective,
+    )
+    write_json(summary, output_dir / f"{model_name}_summary.json")
+
+
 def main() -> None:
     args = parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -335,55 +421,28 @@ def main() -> None:
         threshold_objective=args.threshold_objective,
     )
 
-    chosen_name = selected_model_name(args.model, comparison)
-    chosen_artifacts = artifacts[chosen_name]
-    chosen_threshold = float(chosen_artifacts["threshold_choice"]["threshold"])
-
     comparison.to_csv(args.output_dir / "model_comparison.csv", index=False)
-    build_threshold_table(
-        y_true=y_test,
-        probabilities=chosen_artifacts["test_probabilities"],
-        chosen_threshold=chosen_threshold,
-    ).to_csv(args.output_dir / f"{chosen_name}_threshold_table.csv", index=False)
-    extract_feature_importance(
-        chosen_artifacts["model"], X.columns.tolist()
-    ).to_csv(args.output_dir / f"{chosen_name}_feature_importance.csv", index=False)
 
-    plot_precision_recall(
-        y_val=y_val,
-        val_probabilities=chosen_artifacts["val_probabilities"],
-        y_test=y_test,
-        test_probabilities=chosen_artifacts["test_probabilities"],
-        chosen_threshold=chosen_threshold,
-        output_path=args.output_dir / f"{chosen_name}_precision_recall_curve.png",
-    )
-
-    summary = {
-        "data_dir": str(args.data_dir),
-        "selected_model": chosen_name,
-        "threshold_objective": args.threshold_objective,
-        "train_shape": list(train_df.shape),
-        "test_shape": list(test_df.shape),
-        "train_fraud_rate": float(y.mean()),
-        "test_fraud_rate": float(y_test.mean()),
-        "validation_threshold_choice": chosen_artifacts["threshold_choice"],
-        "validation_metrics_at_selected_threshold": chosen_artifacts["val_metrics"],
-        "test_metrics_at_selected_threshold": chosen_artifacts["test_metrics"],
-        "test_average_precision": float(
-            average_precision_score(y_test, chosen_artifacts["test_probabilities"])
-        ),
-        "test_roc_auc": float(roc_auc_score(y_test, chosen_artifacts["test_probabilities"])),
-        "top_features": extract_feature_importance(
-            chosen_artifacts["model"], X.columns.tolist()
-        ).head(10).to_dict(orient="records"),
-    }
-    write_json(summary, args.output_dir / f"{chosen_name}_summary.json")
+    generated_models = target_model_names(args.model, comparison)
+    for model_name in generated_models:
+        write_model_outputs(
+            model_name=model_name,
+            artifacts=artifacts[model_name],
+            X_columns=X.columns.tolist(),
+            train_df=train_df,
+            test_df=test_df,
+            y=y,
+            y_val=y_val,
+            y_test=y_test,
+            output_dir=args.output_dir,
+            data_dir=args.data_dir,
+            threshold_objective=args.threshold_objective,
+        )
 
     print("Saved outputs to:", args.output_dir.resolve())
     print("Available models:")
     print(comparison.to_string(index=False))
-    print("\nSelected model:", chosen_name)
-    print(json.dumps(summary, indent=2))
+    print("\nGenerated artifacts for:", ", ".join(generated_models))
 
 
 if __name__ == "__main__":
