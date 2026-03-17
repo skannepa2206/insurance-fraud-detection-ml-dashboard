@@ -331,15 +331,39 @@ def apply_css(theme_name: str) -> None:
           font-weight: 600;
         }}
 
+        .stTabs [data-baseweb="tab"] *,
+        .stTabs [data-baseweb="tab"] p,
+        .stTabs [data-baseweb="tab"] span,
+        .stTabs [data-baseweb="tab"] div {{
+          color: var(--text) !important;
+          -webkit-text-fill-color: var(--text) !important;
+        }}
+
         .stTabs [data-baseweb="tab"]:hover {{
           background: var(--accent-soft);
           color: var(--text) !important;
+        }}
+
+        .stTabs [data-baseweb="tab"]:hover *,
+        .stTabs [data-baseweb="tab"]:hover p,
+        .stTabs [data-baseweb="tab"]:hover span,
+        .stTabs [data-baseweb="tab"]:hover div {{
+          color: var(--text) !important;
+          -webkit-text-fill-color: var(--text) !important;
         }}
 
         .stTabs [aria-selected="true"] {{
           background: var(--tab-active-bg) !important;
           color: var(--tab-active-text) !important;
           border-color: transparent !important;
+        }}
+
+        .stTabs [aria-selected="true"] *,
+        .stTabs [aria-selected="true"] p,
+        .stTabs [aria-selected="true"] span,
+        .stTabs [aria-selected="true"] div {{
+          color: var(--tab-active-text) !important;
+          -webkit-text-fill-color: var(--tab-active-text) !important;
         }}
 
         .stTabs [data-baseweb="tab-highlight"] {{
