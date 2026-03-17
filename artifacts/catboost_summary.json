@@ -1,0 +1,94 @@
+{
+  "data_dir": "C:\\Users\\Veena\\Downloads\\AISystems_Mod4\\Auto_fraud_detection_dataset",
+  "selected_model": "catboost",
+  "threshold_objective": "f1",
+  "train_shape": [
+    16000,
+    46
+  ],
+  "test_shape": [
+    4000,
+    46
+  ],
+  "train_fraud_rate": 0.02975,
+  "test_fraud_rate": 0.031,
+  "validation_threshold_choice": {
+    "threshold": 0.5751701643183496,
+    "precision": 0.28888888888888886,
+    "recall": 0.2736842105263158,
+    "f1": 0.28108108108108104,
+    "f2": 0.276595744680851
+  },
+  "validation_metrics_at_selected_threshold": {
+    "threshold": 0.5751701643183496,
+    "flagged_claims": 90,
+    "tp": 26,
+    "fp": 64,
+    "fn": 69,
+    "tn": 3041,
+    "accuracy": 0.9584375,
+    "balanced_accuracy": 0.6265361471311128,
+    "precision": 0.28888888888888886,
+    "recall": 0.2736842105263158,
+    "f1": 0.2810810810810811,
+    "f2": 0.2765957446808511
+  },
+  "test_metrics_at_selected_threshold": {
+    "threshold": 0.5751701643183496,
+    "flagged_claims": 115,
+    "tp": 45,
+    "fp": 70,
+    "fn": 79,
+    "tn": 3806,
+    "accuracy": 0.96275,
+    "balanced_accuracy": 0.6724216851426479,
+    "precision": 0.391304347826087,
+    "recall": 0.3629032258064516,
+    "f1": 0.37656903765690375,
+    "f2": 0.36824877250409166
+  },
+  "test_average_precision": 0.3112892992923805,
+  "test_roc_auc": 0.8310550451080263,
+  "top_features": [
+    {
+      "feature": "vehicle_claim",
+      "importance": 8.973820400833318
+    },
+    {
+      "feature": "incident_day",
+      "importance": 8.693393105275074
+    },
+    {
+      "feature": "total_claim_amount",
+      "importance": 6.436548102542707
+    },
+    {
+      "feature": "incident_hour",
+      "importance": 6.005017201214586
+    },
+    {
+      "feature": "incident_month",
+      "importance": 5.970408635084682
+    },
+    {
+      "feature": "injury_claim",
+      "importance": 5.588127417529555
+    },
+    {
+      "feature": "num_witnesses",
+      "importance": 5.465459734370114
+    },
+    {
+      "feature": "num_injuries",
+      "importance": 4.964363250760419
+    },
+    {
+      "feature": "incident_dow",
+      "importance": 4.938491051017345
+    },
+    {
+      "feature": "months_as_customer",
+      "importance": 4.566386440241939
+    }
+  ]
+}

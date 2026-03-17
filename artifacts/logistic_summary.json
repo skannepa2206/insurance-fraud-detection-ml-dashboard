@@ -1,0 +1,94 @@
+{
+  "data_dir": "C:\\Users\\Veena\\Downloads\\AISystems_Mod4\\Auto_fraud_detection_dataset",
+  "selected_model": "logistic",
+  "threshold_objective": "f1",
+  "train_shape": [
+    16000,
+    46
+  ],
+  "test_shape": [
+    4000,
+    46
+  ],
+  "train_fraud_rate": 0.02975,
+  "test_fraud_rate": 0.031,
+  "validation_threshold_choice": {
+    "threshold": 0.7791099981478357,
+    "precision": 0.1,
+    "recall": 0.16842105263157894,
+    "f1": 0.12549019607843137,
+    "f2": 0.14814814814814814
+  },
+  "validation_metrics_at_selected_threshold": {
+    "threshold": 0.7791099981478357,
+    "flagged_claims": 160,
+    "tp": 16,
+    "fp": 144,
+    "fn": 79,
+    "tn": 2961,
+    "accuracy": 0.9303125,
+    "balanced_accuracy": 0.561022120518688,
+    "precision": 0.1,
+    "recall": 0.16842105263157894,
+    "f1": 0.12549019607843137,
+    "f2": 0.14814814814814814
+  },
+  "test_metrics_at_selected_threshold": {
+    "threshold": 0.7791099981478357,
+    "flagged_claims": 203,
+    "tp": 27,
+    "fp": 176,
+    "fn": 97,
+    "tn": 3700,
+    "accuracy": 0.93175,
+    "balanced_accuracy": 0.5861671493724824,
+    "precision": 0.1330049261083744,
+    "recall": 0.21774193548387097,
+    "f1": 0.1651376146788991,
+    "f2": 0.19313304721030042
+  },
+  "test_average_precision": 0.10464880738446691,
+  "test_roc_auc": 0.7193585838410067,
+  "top_features": [
+    {
+      "feature": "customer_gender_male",
+      "importance": 1.5136716308529514
+    },
+    {
+      "feature": "num_injuries",
+      "importance": 0.793831153458291
+    },
+    {
+      "feature": "customer_gender_female",
+      "importance": 0.5881625371261636
+    },
+    {
+      "feature": "authorities_contacted_fire",
+      "importance": 0.4275199562224512
+    },
+    {
+      "feature": "num_insurers_past_5_years",
+      "importance": 0.42106558081836715
+    },
+    {
+      "feature": "driver_relationship_child",
+      "importance": 0.41808207294720834
+    },
+    {
+      "feature": "num_vehicles_involved",
+      "importance": 0.4159410846219779
+    },
+    {
+      "feature": "driver_relationship_spouse",
+      "importance": 0.38302119994813805
+    },
+    {
+      "feature": "num_witnesses",
+      "importance": 0.368363933465474
+    },
+    {
+      "feature": "num_claims_past_year",
+      "importance": 0.32142374812788227
+    }
+  ]
+}

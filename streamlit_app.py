@@ -15,6 +15,8 @@ ARTIFACT_DIR = ROOT / "artifacts"
 MODEL_KEYS = {
     "XGBoost": "xgboost",
     "Random Forest": "random_forest",
+    "CatBoost": "catboost",
+    "Logistic Regression": "logistic",
 }
 THEMES = {
     "Light": {
@@ -245,15 +247,15 @@ def apply_css(theme_name: str) -> None:
         .brand-title {{
           margin: 0;
           color: var(--text) !important;
-          font-size: 2.2rem;
-          line-height: 1;
+          font-size: 2rem;
+          line-height: 1.05;
         }}
 
         .brand-copy {{
           color: var(--muted) !important;
           margin: 10px 0 0 0;
-          font-size: 1rem;
-          line-height: 1.55;
+          font-size: 0.96rem;
+          line-height: 1.5;
         }}
 
         .hero {{
@@ -276,8 +278,8 @@ def apply_css(theme_name: str) -> None:
         }}
 
         .hero-title {{
-          font-size: clamp(2.8rem, 4.8vw, 4.7rem);
-          line-height: 0.98;
+          font-size: clamp(2.4rem, 4.2vw, 4rem);
+          line-height: 1;
           margin: 0;
           color: var(--text) !important;
           text-align: center;
@@ -288,8 +290,8 @@ def apply_css(theme_name: str) -> None:
           max-width: 920px;
           text-align: center;
           color: var(--muted) !important;
-          font-size: 1.16rem;
-          line-height: 1.55;
+          font-size: 1.04rem;
+          line-height: 1.5;
         }}
 
         .hero-divider {{
@@ -322,8 +324,8 @@ def apply_css(theme_name: str) -> None:
 
         .snapshot-value {{
           color: var(--text) !important;
-          font-size: 1.02rem;
-          line-height: 1.45;
+          font-size: 0.98rem;
+          line-height: 1.4;
         }}
 
         .metric-card {{
@@ -349,14 +351,14 @@ def apply_css(theme_name: str) -> None:
 
         .metric-name {{
           color: var(--label) !important;
-          font-size: 1.05rem;
+          font-size: 0.96rem;
           line-height: 1.2;
           font-weight: 500;
         }}
 
         .metric-value {{
           color: var(--text) !important;
-          font-size: clamp(2rem, 2.8vw, 3rem);
+          font-size: clamp(1.85rem, 2.3vw, 2.55rem);
           line-height: 1;
           font-weight: 700;
           letter-spacing: -0.03em;
@@ -380,15 +382,15 @@ def apply_css(theme_name: str) -> None:
 
         .section-title {{
           color: var(--text) !important;
-          font-size: 1.35rem;
+          font-size: 1.2rem;
           font-weight: 700;
           margin: 0;
         }}
 
         .section-copy {{
           color: var(--muted) !important;
-          font-size: 0.98rem;
-          line-height: 1.55;
+          font-size: 0.94rem;
+          line-height: 1.5;
           margin: 0;
         }}
 
@@ -477,6 +479,7 @@ def apply_css(theme_name: str) -> None:
         }}
 
         .stSelectbox label,
+        .stRadio label,
         .stToggle label,
         .stExpander label {{
           color: var(--label) !important;
@@ -484,6 +487,39 @@ def apply_css(theme_name: str) -> None:
           font-size: 0.76rem !important;
           letter-spacing: 0.08em !important;
           text-transform: uppercase !important;
+        }}
+
+        div[data-testid="stRadio"] [role="radiogroup"] {{
+          gap: 10px;
+        }}
+
+        div[data-testid="stRadio"] label {{
+          background: var(--panel) !important;
+          border: 1px solid var(--stroke) !important;
+          border-radius: 14px !important;
+          padding: 10px 12px !important;
+          margin-bottom: 8px !important;
+          transition: border-color 0.15s ease, background 0.15s ease;
+        }}
+
+        div[data-testid="stRadio"] label:hover {{
+          border-color: var(--accent) !important;
+          background: var(--panel-soft) !important;
+        }}
+
+        div[data-testid="stRadio"] label:has(input:checked) {{
+          background: var(--accent-soft) !important;
+          border-color: var(--accent) !important;
+        }}
+
+        div[data-testid="stRadio"] label p {{
+          color: var(--text) !important;
+          font-size: 0.98rem !important;
+          line-height: 1.3 !important;
+        }}
+
+        div[data-testid="stRadio"] input[type="radio"] {{
+          accent-color: var(--accent) !important;
         }}
 
         div[data-baseweb="select"] > div {{
@@ -644,6 +680,10 @@ def apply_css(theme_name: str) -> None:
           font-size: 0.94rem;
           line-height: 1.55;
           margin-top: 6px;
+        }}
+
+        .stack-gap {{
+          height: 18px;
         }}
 
         .use-card {{
@@ -845,6 +885,8 @@ def render_overview(
         )
         st.image(str(ARTIFACT_DIR / f"{model_key}_precision_recall_curve.png"), use_container_width=True)
 
+    st.markdown('<div class="stack-gap"></div>', unsafe_allow_html=True)
+
     section_header(
         "Review outcome",
         "This summary reflects the selected threshold currently shown in the saved model output.",
@@ -933,6 +975,8 @@ def render_threshold_explorer(theme_name: str, summary: dict, threshold_df: pd.D
             unsafe_allow_html=True,
         )
 
+    st.markdown('<div class="stack-gap"></div>', unsafe_allow_html=True)
+
     with st.expander("Show saved threshold scenarios"):
         table = threshold_df.copy()
         table["threshold"] = table["threshold"].map(lambda x: f"{x:.3f}")
@@ -987,10 +1031,12 @@ def main() -> None:
             help="Switch between light and dark viewing modes.",
         )
         st.session_state["dark_mode"] = dark_mode
-        model_label = st.selectbox(
+        model_options = list(MODEL_KEYS.keys())
+        default_index = model_options.index("XGBoost")
+        model_label = st.radio(
             "Scoring model",
-            list(MODEL_KEYS.keys()),
-            index=0,
+            model_options,
+            index=default_index,
             help="Switch between the saved model outputs used in the analysis.",
         )
         show_guide = st.toggle(
