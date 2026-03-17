@@ -12,6 +12,7 @@ import streamlit as st
 
 ROOT = Path(__file__).resolve().parent
 ARTIFACT_DIR = ROOT / "artifacts"
+FONT_FAMILY = "Instrument Sans"
 MODEL_KEYS = {
     "XGBoost": "xgboost",
     "Random Forest": "random_forest",
@@ -137,7 +138,7 @@ def apply_css(theme_name: str) -> None:
     st.markdown(
         f"""
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap');
 
         :root {{
           --paper: {t["paper"]};
@@ -165,7 +166,7 @@ def apply_css(theme_name: str) -> None:
         }}
 
         html, body {{
-          font-family: 'Manrope', sans-serif;
+          font-family: '{FONT_FAMILY}', sans-serif;
         }}
 
         .stApp,
@@ -178,7 +179,7 @@ def apply_css(theme_name: str) -> None:
         .stApp [data-testid="stCaptionContainer"] *,
         .stApp [data-testid="stMetricLabel"] *,
         .stApp [data-testid="stMetricValue"] * {{
-          font-family: 'Manrope', sans-serif;
+          font-family: '{FONT_FAMILY}', sans-serif;
         }}
 
         .material-icons,
@@ -235,11 +236,11 @@ def apply_css(theme_name: str) -> None:
         }}
 
         .sidebar-kicker {{
-          font-family: 'Manrope', sans-serif;
+          font-family: '{FONT_FAMILY}', sans-serif;
           color: var(--label);
-          font-size: 0.78rem;
-          font-weight: 700;
-          letter-spacing: 0.12em;
+          font-size: 0.76rem;
+          font-weight: 600;
+          letter-spacing: 0.1em;
           text-transform: uppercase;
           margin-bottom: 8px;
         }}
@@ -247,17 +248,17 @@ def apply_css(theme_name: str) -> None:
         .brand-title {{
           margin: 0;
           color: var(--text) !important;
-          font-size: 2.05rem;
-          font-weight: 800;
-          letter-spacing: -0.04em;
+          font-size: 1.92rem;
+          font-weight: 700;
+          letter-spacing: -0.03em;
           line-height: 1.02;
         }}
 
         .brand-copy {{
           color: var(--muted) !important;
           margin: 10px 0 0 0;
-          font-size: 0.97rem;
-          line-height: 1.62;
+          font-size: 0.95rem;
+          line-height: 1.56;
         }}
 
         .hero {{
@@ -273,10 +274,10 @@ def apply_css(theme_name: str) -> None:
         }}
 
         .hero-kicker {{
-          font-family: 'Manrope', sans-serif;
+          font-family: '{FONT_FAMILY}', sans-serif;
           color: var(--label);
-          font-weight: 700;
-          letter-spacing: 0.12em;
+          font-weight: 600;
+          letter-spacing: 0.1em;
           text-transform: uppercase;
           font-size: 0.8rem;
           margin-bottom: 14px;
@@ -284,12 +285,12 @@ def apply_css(theme_name: str) -> None:
         }}
 
         .hero-title {{
-          font-size: clamp(2.7rem, 5vw, 4.8rem);
+          font-size: clamp(2.45rem, 4.7vw, 4.1rem);
           line-height: 1.04;
           margin: 0;
           color: var(--text) !important;
-          font-weight: 800;
-          letter-spacing: -0.05em;
+          font-weight: 700;
+          letter-spacing: -0.04em;
           text-align: center;
         }}
 
@@ -298,8 +299,8 @@ def apply_css(theme_name: str) -> None:
           max-width: 880px;
           text-align: center;
           color: var(--muted) !important;
-          font-size: 1.08rem;
-          line-height: 1.72;
+          font-size: 1rem;
+          line-height: 1.62;
         }}
 
         .hero-divider {{
@@ -331,19 +332,19 @@ def apply_css(theme_name: str) -> None:
         }}
 
         .snapshot-label {{
-          font-family: 'Manrope', sans-serif;
+          font-family: '{FONT_FAMILY}', sans-serif;
           color: var(--label);
-          font-size: 0.79rem;
-          font-weight: 700;
-          letter-spacing: 0.12em;
+          font-size: 0.77rem;
+          font-weight: 600;
+          letter-spacing: 0.1em;
           text-transform: uppercase;
           margin-bottom: 0;
         }}
 
         .snapshot-value {{
           color: var(--text) !important;
-          font-size: 1.04rem;
-          font-weight: 600;
+          font-size: 1rem;
+          font-weight: 500;
           line-height: 1.45;
         }}
 
@@ -371,17 +372,17 @@ def apply_css(theme_name: str) -> None:
 
         .metric-name {{
           color: var(--label) !important;
-          font-size: 0.95rem;
+          font-size: 0.93rem;
           line-height: 1.2;
-          font-weight: 700;
+          font-weight: 600;
         }}
 
         .metric-value {{
           color: var(--text) !important;
-          font-size: clamp(2rem, 2.6vw, 2.9rem);
+          font-size: clamp(1.92rem, 2.4vw, 2.55rem);
           line-height: 1.02;
-          font-weight: 800;
-          letter-spacing: -0.05em;
+          font-weight: 700;
+          letter-spacing: -0.04em;
         }}
 
         .section-card {{
@@ -402,16 +403,16 @@ def apply_css(theme_name: str) -> None:
 
         .section-title {{
           color: var(--text) !important;
-          font-size: 1.26rem;
-          font-weight: 800;
-          letter-spacing: -0.03em;
+          font-size: 1.14rem;
+          font-weight: 700;
+          letter-spacing: -0.02em;
           margin: 0;
         }}
 
         .section-copy {{
           color: var(--muted) !important;
-          font-size: 0.98rem;
-          line-height: 1.66;
+          font-size: 0.95rem;
+          line-height: 1.58;
           margin: 0;
         }}
 
@@ -424,9 +425,9 @@ def apply_css(theme_name: str) -> None:
           border-radius: 999px;
           border: 1px solid var(--stroke-strong);
           color: var(--label);
-          font-family: 'Manrope', sans-serif;
+          font-family: '{FONT_FAMILY}', sans-serif;
           font-size: 0.8rem;
-          font-weight: 800;
+          font-weight: 700;
           cursor: help;
           background: var(--panel-soft);
         }}
@@ -506,10 +507,10 @@ def apply_css(theme_name: str) -> None:
         .stToggle label,
         .stExpander label {{
           color: var(--label) !important;
-          font-family: 'Manrope', sans-serif !important;
+          font-family: '{FONT_FAMILY}', sans-serif !important;
           font-size: 0.76rem !important;
-          font-weight: 700 !important;
-          letter-spacing: 0.12em !important;
+          font-weight: 600 !important;
+          letter-spacing: 0.1em !important;
           text-transform: uppercase !important;
         }}
 
@@ -619,9 +620,9 @@ def apply_css(theme_name: str) -> None:
 
         [data-testid="stWidgetLabel"] {{
           color: var(--label) !important;
-          font-family: 'Manrope', sans-serif !important;
-          font-weight: 700 !important;
-          letter-spacing: 0.12em !important;
+          font-family: '{FONT_FAMILY}', sans-serif !important;
+          font-weight: 600 !important;
+          letter-spacing: 0.1em !important;
           text-transform: uppercase !important;
         }}
 
@@ -677,10 +678,10 @@ def apply_css(theme_name: str) -> None:
           background: var(--panel-soft);
           color: var(--label);
           text-align: left;
-          font-family: 'Manrope', sans-serif;
+          font-family: '{FONT_FAMILY}', sans-serif;
           font-size: 0.76rem;
-          font-weight: 700;
-          letter-spacing: 0.12em;
+          font-weight: 600;
+          letter-spacing: 0.1em;
           text-transform: uppercase;
           padding: 16px 18px;
         }}
@@ -785,25 +786,28 @@ def plot_model_comparison(df: pd.DataFrame, theme_name: str) -> go.Figure:
     max_value = float(chart["test_average_precision"].max())
     fig.update_layout(
         title="Model ranking quality",
-        title_font=dict(color=palette["text"], size=16),
+        title_font=dict(color=palette["text"], size=15, family=FONT_FAMILY),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor=palette["plot_bg"],
         template="none",
-        font=dict(color=palette["text"], family="Space Grotesk"),
-        margin=dict(l=20, r=20, t=58, b=20),
-        height=360,
-        yaxis_title="Test average precision",
+        font=dict(color=palette["text"], family=FONT_FAMILY),
+        margin=dict(l=88, r=26, t=66, b=56),
+        height=372,
+        yaxis_title="",
     )
     fig.update_yaxes(
         gridcolor=palette["grid"],
         range=[0, max_value * 1.18],
-        title_font=dict(color=palette["label"], size=14),
-        tickfont=dict(color=palette["label"], size=12),
+        title_font=dict(color=palette["label"], size=12, family=FONT_FAMILY),
+        tickfont=dict(color=palette["label"], size=11, family=FONT_FAMILY),
+        automargin=True,
+        title_standoff=8,
         zerolinecolor=palette["grid"],
     )
     fig.update_xaxes(
-        title_font=dict(color=palette["label"], size=14),
-        tickfont=dict(color=palette["label"], size=12),
+        title_font=dict(color=palette["label"], size=12, family=FONT_FAMILY),
+        tickfont=dict(color=palette["label"], size=11, family=FONT_FAMILY),
+        automargin=True,
         linecolor=palette["grid"],
     )
     return fig
@@ -832,35 +836,39 @@ def plot_threshold_tradeoff(df: pd.DataFrame, theme_name: str, selected_threshol
     fig.add_vline(x=selected_threshold, line_dash="dot", line_color=palette["muted"])
     fig.update_layout(
         title="Threshold trade-off",
-        title_font=dict(color=palette["text"], size=16),
+        title_font=dict(color=palette["text"], size=15, family=FONT_FAMILY),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor=palette["plot_bg"],
         template="none",
-        font=dict(color=palette["text"], family="Space Grotesk"),
-        margin=dict(l=20, r=20, t=58, b=24),
-        height=360,
+        font=dict(color=palette["text"], family=FONT_FAMILY),
+        margin=dict(l=74, r=28, t=76, b=78),
+        height=390,
         xaxis_title="Probability threshold",
         yaxis_title="Score",
         legend=dict(
             orientation="h",
             yanchor="bottom",
-            y=1.02,
+            y=1.08,
             x=0,
-            font=dict(color=palette["text"], size=13),
+            font=dict(color=palette["text"], size=11, family=FONT_FAMILY),
             bgcolor="rgba(0,0,0,0)",
         ),
     )
     fig.update_yaxes(
         range=[0, 1],
         gridcolor=palette["grid"],
-        title_font=dict(color=palette["label"], size=14),
-        tickfont=dict(color=palette["label"], size=12),
+        title_font=dict(color=palette["label"], size=12, family=FONT_FAMILY),
+        tickfont=dict(color=palette["label"], size=11, family=FONT_FAMILY),
+        automargin=True,
+        title_standoff=8,
         zerolinecolor=palette["grid"],
     )
     fig.update_xaxes(
         gridcolor=palette["grid"],
-        title_font=dict(color=palette["label"], size=14),
-        tickfont=dict(color=palette["label"], size=12),
+        title_font=dict(color=palette["label"], size=12, family=FONT_FAMILY),
+        tickfont=dict(color=palette["label"], size=11, family=FONT_FAMILY),
+        automargin=True,
+        title_standoff=18,
         linecolor=palette["grid"],
     )
     return fig
@@ -879,25 +887,31 @@ def plot_feature_importance(df: pd.DataFrame, theme_name: str) -> go.Figure:
     )
     fig.update_layout(
         title="Top driver signals",
-        title_font=dict(color=palette["text"], size=16),
+        title_font=dict(color=palette["text"], size=15, family=FONT_FAMILY),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor=palette["plot_bg"],
         template="none",
-        font=dict(color=palette["text"], family="Space Grotesk"),
-        margin=dict(l=20, r=20, t=58, b=20),
-        height=430,
+        font=dict(color=palette["text"], family=FONT_FAMILY),
+        margin=dict(l=190, r=24, t=68, b=44),
+        height=452,
         coloraxis_showscale=False,
+        xaxis_title="Importance",
+        yaxis_title="",
     )
     fig.update_xaxes(
         gridcolor=palette["grid"],
-        title_font=dict(color=palette["label"], size=14),
-        tickfont=dict(color=palette["label"], size=12),
+        title_font=dict(color=palette["label"], size=12, family=FONT_FAMILY),
+        tickfont=dict(color=palette["label"], size=11, family=FONT_FAMILY),
+        automargin=True,
+        title_standoff=10,
         zerolinecolor=palette["grid"],
     )
     fig.update_yaxes(
         gridcolor=palette["grid"],
-        title_font=dict(color=palette["label"], size=14),
-        tickfont=dict(color=palette["label"], size=12),
+        title_font=dict(color=palette["label"], size=12, family=FONT_FAMILY),
+        tickfont=dict(color=palette["label"], size=11, family=FONT_FAMILY),
+        automargin=True,
+        title_standoff=8,
     )
     return fig
 
