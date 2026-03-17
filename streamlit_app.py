@@ -257,8 +257,8 @@ def apply_css(theme_name: str) -> None:
         .brand-copy {{
           color: var(--muted) !important;
           margin: 10px 0 0 0;
-          font-size: 0.95rem;
-          line-height: 1.56;
+          font-size: 0.88rem;
+          line-height: 1.48;
         }}
 
         .hero {{
@@ -641,8 +641,13 @@ def apply_css(theme_name: str) -> None:
         [data-testid="stCaptionContainer"] p,
         .utility-note {{
           color: var(--subtle) !important;
-          font-size: 0.98rem;
-          line-height: 1.45;
+          display: block;
+          width: 100%;
+          margin: 2px 0 10px 0;
+          text-align: right;
+          font-size: 0.82rem;
+          font-weight: 500;
+          line-height: 1.32;
         }}
 
         [data-testid="stExpander"] {{
@@ -731,12 +736,13 @@ def apply_css(theme_name: str) -> None:
           margin: 0;
           padding-left: 1.1rem;
           color: var(--muted);
-          line-height: 1.65;
+          font-size: 0.88rem;
+          line-height: 1.52;
         }}
 
         .use-card li {{
           color: var(--muted) !important;
-          margin-bottom: 0.4rem;
+          margin-bottom: 0.28rem;
         }}
         </style>
         """,
@@ -1225,7 +1231,7 @@ def main() -> None:
             )
 
     st.markdown(
-        '<div class="utility-note">Hover the info markers for quick definitions.</div>',
+        '<div class="utility-note">Pro tip: Hover any i badge for quick KPI context.</div>',
         unsafe_allow_html=True,
     )
 
