@@ -218,7 +218,54 @@ def apply_css(theme_name: str) -> None:
         [data-testid="stSidebarCollapseButton"],
         button[aria-label="Open sidebar"],
         button[aria-label="Close sidebar"] {{
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          width: 38px !important;
+          height: 38px !important;
+          border: 1px solid var(--stroke-strong) !important;
+          border-radius: 999px !important;
+          background: var(--panel) !important;
+          color: var(--text) !important;
+          box-shadow: var(--shadow) !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+          z-index: 20 !important;
+        }}
+
+        [data-testid="collapsedControl"] svg,
+        [data-testid="stSidebarCollapseButton"] svg,
+        button[aria-label="Open sidebar"] svg,
+        button[aria-label="Close sidebar"] svg {{
           display: none !important;
+        }}
+
+        button[aria-label="Open sidebar"]::after,
+        [data-testid="collapsedControl"] button::after {{
+          content: ">>";
+          font-family: '{FONT_FAMILY}', sans-serif !important;
+          font-size: 0.82rem !important;
+          font-weight: 700 !important;
+          letter-spacing: -0.04em !important;
+          color: var(--text) !important;
+        }}
+
+        button[aria-label="Close sidebar"]::after,
+        [data-testid="stSidebarCollapseButton"]::after {{
+          content: "<<";
+          font-family: '{FONT_FAMILY}', sans-serif !important;
+          font-size: 0.82rem !important;
+          font-weight: 700 !important;
+          letter-spacing: -0.04em !important;
+          color: var(--text) !important;
+        }}
+
+        [data-testid="collapsedControl"]:hover,
+        [data-testid="stSidebarCollapseButton"]:hover,
+        button[aria-label="Open sidebar"]:hover,
+        button[aria-label="Close sidebar"]:hover {{
+          border-color: var(--accent) !important;
+          background: var(--panel-soft) !important;
         }}
 
         .block-container {{
