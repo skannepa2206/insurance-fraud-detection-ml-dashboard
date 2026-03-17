@@ -1,0 +1,94 @@
+{
+  "data_dir": "C:\\Users\\Veena\\Downloads\\AISystems_Mod4\\Auto_fraud_detection_dataset",
+  "selected_model": "xgboost",
+  "threshold_objective": "f1",
+  "train_shape": [
+    16000,
+    46
+  ],
+  "test_shape": [
+    4000,
+    46
+  ],
+  "train_fraud_rate": 0.02975,
+  "test_fraud_rate": 0.031,
+  "validation_threshold_choice": {
+    "threshold": 0.588958203792572,
+    "precision": 0.17777777777777778,
+    "recall": 0.25263157894736843,
+    "f1": 0.20869565217391303,
+    "f2": 0.2330097087378641
+  },
+  "validation_metrics_at_selected_threshold": {
+    "threshold": 0.588958203792572,
+    "flagged_claims": 135,
+    "tp": 24,
+    "fp": 111,
+    "fn": 71,
+    "tn": 2994,
+    "accuracy": 0.943125,
+    "balanced_accuracy": 0.6084413933384185,
+    "precision": 0.17777777777777778,
+    "recall": 0.25263157894736843,
+    "f1": 0.20869565217391303,
+    "f2": 0.23300970873786409
+  },
+  "test_metrics_at_selected_threshold": {
+    "threshold": 0.588958203792572,
+    "flagged_claims": 176,
+    "tp": 43,
+    "fp": 133,
+    "fn": 81,
+    "tn": 3743,
+    "accuracy": 0.9465,
+    "balanced_accuracy": 0.6562302340290955,
+    "precision": 0.24431818181818182,
+    "recall": 0.3467741935483871,
+    "f1": 0.2866666666666667,
+    "f2": 0.31994047619047616
+  },
+  "test_average_precision": 0.20966871909023482,
+  "test_roc_auc": 0.8093998635107693,
+  "top_features": [
+    {
+      "feature": "num_witnesses",
+      "importance": 0.07059808820486069
+    },
+    {
+      "feature": "customer_gender_male",
+      "importance": 0.05400976166129112
+    },
+    {
+      "feature": "num_insurers_past_5_years",
+      "importance": 0.04350229725241661
+    },
+    {
+      "feature": "num_injuries",
+      "importance": 0.043467264622449875
+    },
+    {
+      "feature": "num_vehicles_involved",
+      "importance": 0.039763614535331726
+    },
+    {
+      "feature": "policy_state_nv",
+      "importance": 0.025941042229533195
+    },
+    {
+      "feature": "incident_severity",
+      "importance": 0.025599945336580276
+    },
+    {
+      "feature": "driver_relationship_other",
+      "importance": 0.02537286840379238
+    },
+    {
+      "feature": "customer_gender_female",
+      "importance": 0.02505231276154518
+    },
+    {
+      "feature": "collision_type_rear",
+      "importance": 0.024986237287521362
+    }
+  ]
+}

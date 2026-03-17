@@ -1,0 +1,94 @@
+{
+  "data_dir": "C:\\Users\\Veena\\Downloads\\AISystems_Mod4\\Auto_fraud_detection_dataset",
+  "selected_model": "random_forest",
+  "threshold_objective": "f1",
+  "train_shape": [
+    16000,
+    46
+  ],
+  "test_shape": [
+    4000,
+    46
+  ],
+  "train_fraud_rate": 0.02975,
+  "test_fraud_rate": 0.031,
+  "validation_threshold_choice": {
+    "threshold": 0.1,
+    "precision": 0.30833333333333335,
+    "recall": 0.3894736842105263,
+    "f1": 0.34418604651162793,
+    "f2": 0.37000000000000005
+  },
+  "validation_metrics_at_selected_threshold": {
+    "threshold": 0.1,
+    "flagged_claims": 120,
+    "tp": 37,
+    "fp": 83,
+    "fn": 58,
+    "tn": 3022,
+    "accuracy": 0.9559375,
+    "balanced_accuracy": 0.6813713026527672,
+    "precision": 0.30833333333333335,
+    "recall": 0.3894736842105263,
+    "f1": 0.34418604651162793,
+    "f2": 0.37
+  },
+  "test_metrics_at_selected_threshold": {
+    "threshold": 0.1,
+    "flagged_claims": 162,
+    "tp": 53,
+    "fp": 109,
+    "fn": 71,
+    "tn": 3767,
+    "accuracy": 0.955,
+    "balanced_accuracy": 0.699648789906455,
+    "precision": 0.3271604938271605,
+    "recall": 0.4274193548387097,
+    "f1": 0.3706293706293706,
+    "f2": 0.4027355623100304
+  },
+  "test_average_precision": 0.3743933296763917,
+  "test_roc_auc": 0.8121327690668797,
+  "top_features": [
+    {
+      "feature": "vehicle_claim",
+      "importance": 0.07835647402261295
+    },
+    {
+      "feature": "months_as_customer",
+      "importance": 0.07383081276609373
+    },
+    {
+      "feature": "total_claim_amount",
+      "importance": 0.0714316206910253
+    },
+    {
+      "feature": "incident_day",
+      "importance": 0.06148100423593259
+    },
+    {
+      "feature": "customer_age",
+      "importance": 0.06136472672713309
+    },
+    {
+      "feature": "incident_hour",
+      "importance": 0.059081999391254775
+    },
+    {
+      "feature": "num_witnesses",
+      "importance": 0.054907452008777655
+    },
+    {
+      "feature": "injury_claim",
+      "importance": 0.05156079319965519
+    },
+    {
+      "feature": "incident_month",
+      "importance": 0.04731448759081773
+    },
+    {
+      "feature": "auto_year",
+      "importance": 0.04216277265847092
+    }
+  ]
+}
